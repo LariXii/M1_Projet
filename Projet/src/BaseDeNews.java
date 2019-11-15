@@ -32,7 +32,7 @@ public class BaseDeNews{
 
 	public int sauvegarder(String file) throws IOException,FileNotFoundException {
 		//try {
-		FileOutputStream fos = new FileOutputStream( file );
+		FileOutputStream fos = new FileOutputStream("resources/"+file);
 		ObjectOutputStream oos = new ObjectOutputStream( fos );
 		// No buffer is required because ObjectOutputStream is automaticaly buffered.
 
@@ -41,7 +41,7 @@ public class BaseDeNews{
 		oos.flush();
 		oos.close();
 
-		System.out.println( "Les nouvelles sont sauvegardées" );
+		System.out.println( "Les nouvelles sont sauvegardï¿½es" );
 		/* } catch ( IOException exception ) {
             System.err.println( "Cannot write objects into the stream" );
             exception.printStackTrace();
@@ -51,7 +51,7 @@ public class BaseDeNews{
 
 	@SuppressWarnings("unchecked")
 	public int ouvrir(String file) throws FileNotFoundException,IOException, ClassNotFoundException{
-		FileInputStream fis = new FileInputStream( file );
+		FileInputStream fis = new FileInputStream("resources/"+file );
 		ObjectInputStream ois = new ObjectInputStream( fis );
 
 		basenews.addAll((TreeSet<News>) ois.readObject());

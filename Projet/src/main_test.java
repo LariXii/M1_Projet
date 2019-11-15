@@ -5,7 +5,6 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
-//https://o7planning.org/fr/11079/tutoriel-javafx-tableview
 //import java.awt.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -42,7 +41,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-
+//https://o7planning.org/fr/11079/tutoriel-javafx-tableview
 public class main_test extends Application {
 
 	/**objets graphiques représentant un cercle*/
@@ -188,7 +187,7 @@ public class main_test extends Application {
 					updateDataTableView(table);
 				}
 				catch(FileNotFoundException fnd) {
-					System.out.print("Le fichier n'a pas été trouvé");
+					System.out.print("Le fichier n'a pas été trouvé"+fnd);
 				}
 				catch(IOException ioe) {
 					System.out.print("Problème de lecture du fichier");
