@@ -81,7 +81,7 @@ public class BaseDeTweets {
             csv.close();
             System.out.print(baseTweets.size());
     }
-
+//fdsf
     @Override
     public String toString() {
         Iterator<Tweet> it = baseTweets.iterator();
