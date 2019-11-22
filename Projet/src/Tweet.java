@@ -74,7 +74,6 @@ public class Tweet implements Comparable<Tweet>, Serializable {
 
     @Override
     public int compareTo(Tweet tweet) {
-        int res = this.dateTweet.compareTo(tweet.getDateTweet());
-        return res;
+        return 1;
     }
 }

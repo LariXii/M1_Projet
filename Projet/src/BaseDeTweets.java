@@ -61,8 +61,9 @@ public class BaseDeTweets {
         BufferedReader csv = new BufferedReader(new FileReader("resources/"+file));
         String chaine;
             int i = 1;
-            while(i<10 && (chaine = csv.readLine())!= null)
+            while((chaine = csv.readLine())!= null)
             {
+                if(i>1) {
                     String[] tabChaine = chaine.split("\t");
                     long idTweet = Long.parseLong(tabChaine[0]);
                     String idUser = tabChaine[1];
@@ -72,8 +73,9 @@ public class BaseDeTweets {
                     String texte = tabChaine[3];
                     String reTweet = "null";
                     Tweet t = new Tweet(idTweet, idUser, date, texte, reTweet);
-                    System.out.print("[]"+t+"\n");
+                    System.out.print("["+i+"]" + t + "\n");
                     baseTweets.add(t);
+                }
                 i++;
             }
             csv.close();
