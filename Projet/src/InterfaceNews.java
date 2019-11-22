@@ -42,7 +42,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 //https://o7planning.org/fr/11079/tutoriel-javafx-tableview
-public class main_test extends Application {
+public class InterfaceNews extends Application {
 
 	/**objets graphiques représentant un cercle*/
 	public  Rectangle rectangle;

@@ -1,11 +1,12 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Tweet {
+public class Tweet implements Comparable<Tweet>, Serializable {
     private long idTweet;
     private String idUser;
     private LocalDate dateTweet;
     private String textTweet;
-    private String idReTweet = null;
+    private String idReTweet;
 
     public Tweet(long idTweet, String idUser, LocalDate dateTweet, String textTweet, String idReTweet) {
         this.idTweet = idTweet;
@@ -71,4 +72,9 @@ public class Tweet {
                 '}';
     }
 
+    @Override
+    public int compareTo(Tweet tweet) {
+        int res = this.dateTweet.compareTo(tweet.getDateTweet());
+        return res;
+    }
 }
