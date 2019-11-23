@@ -159,6 +159,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
+      <module name="Projet" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -200,10 +208,12 @@
       <item itemvalue="Application.Main" />
       <item itemvalue="Application.InterfaceNews" />
       <item itemvalue="Application.InterfaceTweet" />
+      <item itemvalue="Application.Test" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.InterfaceTweet" />
+        <item itemvalue="Application.Test" />
         <item itemvalue="Application.InterfaceNews" />
       </list>
     </recent_temporary>

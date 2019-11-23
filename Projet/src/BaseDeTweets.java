@@ -1,15 +1,18 @@
+import sun.reflect.generics.tree.Tree;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.TreeSet;
+import java.util.*;
 
 public class BaseDeTweets {
-    private TreeSet<Tweet> baseTweets = new TreeSet<Tweet>();;
+    private TreeSet<Tweet> baseTweets;
+    private HashMap<String,Integer> listUser;
+    private long[][] matriceAdj;
 
     public BaseDeTweets() {
-        this.baseTweets = new TreeSet<Tweet>();
+        this.baseTweets = new TreeSet<>();
+        this.listUser = new HashMap<>();
     }
 
     public TreeSet<Tweet> getBaseTweets() {
@@ -34,6 +37,25 @@ public class BaseDeTweets {
         baseTweets.remove(it.next());
     }
 
+    public void createMatrice(){//TreeSet<Tweet> tsTweet, HashMap<String,Integer> tUsers){
+        /*int n = tUsers.size();
+          matriceAdj = new long[n][n];
+        /*Iterator<Tweet> it = tsTweet.iterator();
+        Tweet t;
+        int num_sommet;
+        int num_lien;
+        while(it.hasNext()){
+            t = it.next();
+            if(t.getIdReTweet()!=null){
+                num_sommet = tUsers.get(t.getIdUser());
+                num_lien = tUsers.get(t.getIdReTweet());
+                System.out.print("L'utilisateur "+t.getIdUser()+"["+num_sommet+"] a retweeté "+t.getIdReTweet()+"["+num_lien+"]\n");
+                matriceAdj[num_sommet][num_lien]++;
+            }
+        }
+        System.out.print("La matrice est créée !\n"+matriceAdj.length);*/
+    }
+
     public void sauvegarder(String file) throws IOException, FileNotFoundException {
         //try {
         FileOutputStream fos = new FileOutputStream("resources/"+file);
@@ -49,37 +71,45 @@ public class BaseDeTweets {
     }
 
     @SuppressWarnings("unchecked")
-    public void ouvrir(String file) throws FileNotFoundException,IOException, ClassNotFoundException{
-        /*FileInputStream fis = new FileInputStream("resources/"+file );
-        ObjectInputStream ois = new ObjectInputStream( fis );*/
-
-
-        /*baseTweets.addAll((TreeSet<Tweet>) ois.readObject());
-        for( Tweet instance : baseTweets ) {
-            System.out.println( instance );
-        }*/
+    public void ouvrir(String file) throws IOException{
         BufferedReader csv = new BufferedReader(new FileReader("resources/"+file));
         String chaine;
-            int i = 1;
+        int i = 0;
+        /** Création de la base de tweet */
+        new BaseDeTweets();
             while((chaine = csv.readLine())!= null)
             {
-                if(i>1) {
                     String[] tabChaine = chaine.split("\t");
+                    /**Récupération de l'id du tweet*/
                     long idTweet = Long.parseLong(tabChaine[0]);
+                    /**Récupération de l'id de l'utilisateur*/
                     String idUser = tabChaine[1];
+                    /**Ajout de l'id de l'utilisateur dans une map. L'id de l'utilisateur est la clé et le numéro du sommet de la matrice la valeur*/
+                    Integer ret = listUser.putIfAbsent(idUser,i);
+                    if(ret == null){
+                        i++;
+                    }
+                    /**Récupération de la date du tweet*/
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    /**La date étant composée avec l'heure, nous la tronquons*/
                     String[] s_date = tabChaine[2].split(" ");
                     LocalDate date = LocalDate.parse(s_date[0], formatter);
+                    /**Récupération du texte du tweet*/
                     String texte = tabChaine[3];
-                    String reTweet = "null";
+                    /**Récupération de l'id du retweet s'il existe*/
+                    String reTweet = null;
+                    if(tabChaine.length == 5){
+                        reTweet = tabChaine[4];
+                    }
+                    /**Création d'un objet Tweet*/
                     Tweet t = new Tweet(idTweet, idUser, date, texte, reTweet);
-                    System.out.print("["+i+"]" + t + "\n");
+                    /**Ajout dans la base de tweet*/
                     baseTweets.add(t);
-                }
-                i++;
             }
             csv.close();
             System.out.print(baseTweets.size());
+            System.out.print("Il y a "+listUser.size()+" utilisateurs qui ont tweeté");
+            //createMatrice(baseTweets,listUser);
     }
 //fdsf
     @Override

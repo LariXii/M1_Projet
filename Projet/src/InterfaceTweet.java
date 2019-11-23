@@ -181,20 +181,15 @@ public class InterfaceTweet extends Application {
 
         addBut.setOnAction((ActionEvent e) -> {
             if(open) {
-                try{
+                //try{
                     bd = new BaseDeTweets();
-                    bd.ouvrir(field_fichier.getText());
-                    updateDataTableView(table);
-                }
-                catch(FileNotFoundException fnd) {
-                    System.out.print("Le fichier n'a pas été trouvé"+fnd);
-                }
-                catch(IOException ioe) {
+                    bd.createMatrice();
+                    //bd.ouvrir(field_fichier.getText());
+                    //updateDataTableView(table);
+                //}
+                /*catch(IOException ioe) {
                     System.out.print("Problème de lecture du fichier"+ioe);
-                }
-                catch(ClassNotFoundException cnf) {
-                    System.out.print("Problème de lecture du fichier"+cnf);
-                }
+                }*/
             }
             else {
                 try {
