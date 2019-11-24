@@ -34,23 +34,28 @@ public class BaseDeTweets {
         baseTweets.remove(it.next());
     }
 
-    public void createMatrice() {//TreeSet<Tweet> tsTweet, HashMap<String,Integer> tUsers){
-        /*int n = tUsers.size();
-          matriceAdj = new long[n][n];
-        /*Iterator<Tweet> it = tsTweet.iterator();
-        Tweet t;
-        int num_sommet;
-        int num_lien;
-        while(it.hasNext()){
-            t = it.next();
-            if(t.getIdReTweet()!=null){
-                num_sommet = tUsers.get(t.getIdUser());
-                num_lien = tUsers.get(t.getIdReTweet());
-                System.out.print("L'utilisateur "+t.getIdUser()+"["+num_sommet+"] a retweeté "+t.getIdReTweet()+"["+num_lien+"]\n");
-                matriceAdj[num_sommet][num_lien]++;
+    public void diametre(HashMap<String, User> listUsers) {
+        // Getting a Set of Key-value pairs
+        Set entrySet = listUsers.entrySet();
+        // Obtaining an iterator for the entry set
+        Iterator it = entrySet.iterator();
+        while (it.hasNext()) {
+            Map.Entry me = (Map.Entry) it.next();
+            User curr_User = (User) me.getValue();
+            Set entrySetRT = curr_User.getListReTweet().entrySet();
+            // Obtaining an iterator for the entry set
+            Iterator itRT = entrySetRT.iterator();
+            if (itRT.hasNext()) {
+                System.out.println("L'utilisateur " + me.getKey() + " à retweete : " + entrySetRT.size() + " utilisateurs");
+            } else {
+                System.out.println("L'utilisateur " + me.getKey() + " a effectue aucun retweet");
+            }
+            while (itRT.hasNext()) {
+                Map.Entry meRT = (Map.Entry) itRT.next();
+                ArrayList<Tweet> listRT = (ArrayList) meRT.getValue();
+                System.out.println("[" + meRT.getKey() + "] " + listRT.size() + " fois");
             }
         }
-        System.out.print("La matrice est créée !\n"+matriceAdj.length);*/
     }
 
     public void sauvegarder(String file) throws IOException, FileNotFoundException {
@@ -74,7 +79,7 @@ public class BaseDeTweets {
         /** Création de la base de tweet */
         new BaseDeTweets();
         int i = 0;
-        while ((chaine = csv.readLine()) != null && i<50000) {
+        while ((chaine = csv.readLine()) != null) {
             String[] tabChaine = chaine.split("\t");
             /**Récupération de l'id du tweet*/
             long idTweet = Long.parseLong(tabChaine[0]);
@@ -98,22 +103,26 @@ public class BaseDeTweets {
             baseTweets.add(t);
             /** Ajout de l'utilisateur dans la liste des utilisateurs et enregistrement du retweet de l'utilisateur */
             User user = new User(idUser);
-            User ret = listUsers.putIfAbsent(idUser, user);
-            if (ret == null) {
-                user = listUsers.get(idUser);
-                if(reTweet != null){
-                    HashMap<String, ArrayList<Tweet>> listReTweet = user.getListReTweet();
+            listUsers.putIfAbsent(idUser, user);
+            user = listUsers.get(idUser);
+            if (reTweet != null) {
+                HashMap<String, ArrayList<Tweet>> listReTweet = user.getListReTweet();
+                if (listReTweet.get(reTweet) == null) {
+                    ArrayList<Tweet> arr = new ArrayList<>();
+                    arr.add(t);
+                    listReTweet.put(reTweet, arr);
+                } else {
                     listReTweet.get(reTweet).add(t);
                 }
-                else{
-                    user.getListTweet().add(t);
-                }
+            } else {
+                user.getListTweet().add(t);
             }
             i++;
         }
         csv.close();
         System.out.print(baseTweets.size());
         System.out.print("Il y a " + listUsers.size() + " utilisateurs qui ont tweeté");
+        diametre(listUsers);
     }
 
     //fdsf

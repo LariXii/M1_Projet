@@ -270,7 +270,7 @@ public class InterfaceTweet extends Application {
                 showAlert(Alert.AlertType.ERROR, windowForm, "Form Error!", "Veuillez renseigner un titre !");
                 return;
             }
-            News n = new Photo(field_titre.getText(),"Auteur",LocalDate.now(),"UneUrl","unephoto","Unformat",new Resolution(50,50),true);
+
            // bd.ajouterNews(n);
             windowForm.close();
             updateDataTableView(table);
