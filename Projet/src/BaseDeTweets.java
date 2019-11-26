@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -73,56 +74,85 @@ public class BaseDeTweets {
     }
 
     @SuppressWarnings("unchecked")
-    public void ouvrir(String file) throws IOException {
+    public ArrayList<Integer> ouvrir(String file) throws IOException {
         BufferedReader csv = new BufferedReader(new FileReader("resources/" + file));
         String chaine;
+        int num_ligne = 0;
+        ArrayList<Integer> tErr = new ArrayList<>();
         /** Création de la base de tweet */
         new BaseDeTweets();
-        int i = 0;
         while ((chaine = csv.readLine()) != null) {
             String[] tabChaine = chaine.split("\t");
-            /**Récupération de l'id du tweet*/
-            long idTweet = Long.parseLong(tabChaine[0]);
-            /**Récupération de l'id de l'utilisateur*/
-            String idUser = tabChaine[1];
-            /**Récupération de la date du tweet*/
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            /**La date étant composée avec l'heure, nous la tronquons*/
-            String[] s_date = tabChaine[2].split(" ");
-            LocalDate date = LocalDate.parse(s_date[0], formatter);
-            /**Récupération du texte du tweet*/
-            String texte = tabChaine[3];
-            /**Récupération de l'id du retweet s'il existe*/
-            String reTweet = null;
-            if (tabChaine.length == 5) {
-                reTweet = tabChaine[4];
-            }
-            /**Création d'un objet Tweet*/
-            Tweet t = new Tweet(idTweet, idUser, date, texte, reTweet);
-            /**Ajout dans la base de tweet*/
-            baseTweets.add(t);
-            /** Ajout de l'utilisateur dans la liste des utilisateurs et enregistrement du retweet de l'utilisateur */
-            User user = new User(idUser);
-            listUsers.putIfAbsent(idUser, user);
-            user = listUsers.get(idUser);
-            if (reTweet != null) {
-                HashMap<String, ArrayList<Tweet>> listReTweet = user.getListReTweet();
-                if (listReTweet.get(reTweet) == null) {
-                    ArrayList<Tweet> arr = new ArrayList<>();
-                    arr.add(t);
-                    listReTweet.put(reTweet, arr);
-                } else {
-                    listReTweet.get(reTweet).add(t);
+            num_ligne++;
+            if (tabChaine.length == 4 || tabChaine.length == 5) {
+                /**Récupération de l'id du tweet*/
+                long idTweet = Long.parseLong(tabChaine[0]);
+                /**Récupération de l'id de l'utilisateur*/
+                String idUser = tabChaine[1];
+                /**Récupération de la date du tweet*/
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                /**La date étant composée avec l'heure, nous la tronquons*/
+                String[] s_date = tabChaine[2].split(" ");
+                LocalDate date = LocalDate.parse(s_date[0], formatter);
+                /**Récupération du texte du tweet*/
+                String texte = tabChaine[3];
+                /**Récupération de l'id du retweet s'il existe*/
+                String reTweet = null;
+                if (tabChaine.length == 5) {
+                    reTweet = tabChaine[4];
                 }
-            } else {
-                user.getListTweet().add(t);
+                /**Création d'un objet Tweet*/
+                Tweet t = new Tweet(idTweet, idUser, date, texte, reTweet);
+                /**Ajout dans la base de tweet*/
+                baseTweets.add(t);
+                /** Ajout de l'utilisateur dans la liste des utilisateurs et enregistrement du retweet de l'utilisateur */
+                User user = new User(idUser);
+                listUsers.putIfAbsent(idUser, user);
+
+                if(reTweet != null){
+                    User userReTweet = new User(reTweet);
+                    listUsers.putIfAbsent(reTweet, userReTweet);
+                    userReTweet = listUsers.get(reTweet);
+                    userReTweet.setEstReTweet(userReTweet.getEstReTweet() + 1);
+                }
+
+                user = listUsers.get(idUser);
+                if (reTweet != null) {
+                    HashMap<String, ArrayList<Tweet>> listReTweet = user.getListReTweet();
+                    if (listReTweet.get(reTweet) == null) {
+                        ArrayList<Tweet> arr = new ArrayList<>();
+                        arr.add(t);
+                        listReTweet.put(reTweet, arr);
+                    } else {
+                        listReTweet.get(reTweet).add(t);
+                    }
+                } else {
+                    user.getListTweet().add(t);
+                }
             }
-            i++;
+            else{
+                tErr.add(num_ligne);
+            }
         }
         csv.close();
-        System.out.print(baseTweets.size());
-        System.out.print("Il y a " + listUsers.size() + " utilisateurs qui ont tweeté");
-        diametre(listUsers);
+        System.out.println(baseTweets.size());
+        System.out.println("Il y a " + listUsers.size() + " utilisateurs qui ont tweeté");
+        //diametre(listUsers);
+        String t = "";
+        int max = 0;
+        Set entrySet = listUsers.entrySet();
+        // Obtaining an iterator for the entry set
+        Iterator it = entrySet.iterator();
+        while (it.hasNext()) {
+            Map.Entry me = (Map.Entry) it.next();
+            User curr_User = (User) me.getValue();
+            if(max < curr_User.getEstReTweet()){
+                t = curr_User.getId();
+                max = curr_User.getEstReTweet();
+            }
+        }
+        System.out.println("L'utilisateur qui a été le plus retweeté est "+t+" avec "+max+" retweets");
+        return tErr;
     }
 
     //fdsf

@@ -12,10 +12,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.MenuBar;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
@@ -175,11 +177,17 @@ public class InterfaceTweet extends Application {
             if(open) {
                 try{
                     bd = new BaseDeTweets();
-                    bd.ouvrir(field_fichier.getText());
+                    long startTime = System.currentTimeMillis();
+                    ArrayList<Integer> lErr = bd.ouvrir(field_fichier.getText());
+                    long endTime = System.currentTimeMillis();
+                    System.out.println("Total elapsed time in execution of method callMethod() is :"+ (endTime-startTime)/1000+" secondes");
+                    if(lErr.size() != 0){
+                        showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Les lignes suivantes sont au mauvais format "+lErr);
+                    }
                     updateDataTableView(table);
                 }
                 catch(IOException ioe) {
-                    System.out.print("Problème de lecture du fichier"+ioe);
+                    showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Problème de lecture du fichier"+ioe);
                 }
             }
             else {
@@ -187,9 +195,10 @@ public class InterfaceTweet extends Application {
                     bd.sauvegarder(field_fichier.getText());
                 }
                 catch(IOException ioe) {
-                    System.out.print("Le fichier n'existe pas");
+                    showAlert(Alert.AlertType.ERROR,primaryStage,"Save error","Le fichier n'existe pas"+ioe);
                 }
             }
+            windowForm.close();
         });
 
         cancelBut.setOnAction((ActionEvent e) -> {
