@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="883.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="883.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <effect>
       <DropShadow />
    </effect>
@@ -15,7 +23,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="createFormOpenSaveFile" mnemonicParsing="false" text="insérer une base de tweets" />
+              <MenuItem fx:id="ouvrir" mnemonicParsing="false" onAction="#ouvrir" text="insérer une base de tweets" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -40,6 +48,7 @@
                            <children>
                               <Label layoutY="6.0" text="nom_file" />
                               <TextFlow layoutX="11.0" layoutY="35.0" prefHeight="200.0" prefWidth="409.0" />
+                              <TextField fx:id="text_field" layoutX="103.0" layoutY="11.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">

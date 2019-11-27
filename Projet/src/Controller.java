@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 
 
 public class Controller {
+
+    @FXML
     private void ouvrir(Event evt) {
         System.out.println("test");
 
