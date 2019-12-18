@@ -1,6 +1,11 @@
 package main;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphMetrics;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.GraphMeasurer;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -72,63 +77,48 @@ public class BaseDeTweets {
         return this.listCentralUsers(listUsers,5);
     }
 
-    public void diametre(HashMap<String, User> listUsers) {
-        // Getting a Set of Key-value pairs
-        Set entrySet = listUsers.entrySet();
-        // Obtaining an iterator for the entry set
-        Iterator it = entrySet.iterator();
-        while (it.hasNext()) {
-            Map.Entry me = (Map.Entry) it.next();
-            User curr_User = (User) me.getValue();
-            Set entrySetRT = curr_User.getListReTweet().entrySet();
-            // Obtaining an iterator for the entry set
-            Iterator itRT = entrySetRT.iterator();
-            if (itRT.hasNext()) {
-                System.out.println("L'utilisateur " + me.getKey() + " à retweete : " + entrySetRT.size() + " utilisateurs");
-            } else {
-                System.out.println("L'utilisateur " + me.getKey() + " a effectue aucun retweet");
+    public double getDiametre() {
+        long time = System.currentTimeMillis();
+        double diametre = Double.NEGATIVE_INFINITY;
+        int i = 1;
+        //Parcourt de l'ensemble des sommets du graphe
+        for(String source: this.directedWeightedGraph.vertexSet()){
+            System.out.println("["+source+"]#"+i);
+            DijkstraShortestPath<String, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(this.directedWeightedGraph);
+            //Création d'un chemin à partir de la source
+            ShortestPathAlgorithm.SingleSourcePaths<String, DefaultWeightedEdge> sourcePaths = dijkstraAlg.getPaths(source);
+            //Pour chaque sommet on parcourt chacun des sommets et on récupère le plus long court chemin
+            for(String target: this.directedWeightedGraph.vertexSet()) {
+                diametre = Math.max(diametre,sourcePaths.getWeight(target));
             }
-            while (itRT.hasNext()) {
-                Map.Entry meRT = (Map.Entry) itRT.next();
-                ArrayList<Tweet> listRT = (ArrayList) meRT.getValue();
-                System.out.println("[" + meRT.getKey() + "] " + listRT.size() + " fois");
+            if(diametre == Double.NEGATIVE_INFINITY){
+                break;
             }
+            i++;
         }
+        reportPerformanceFor("graph diametre", time);
+        return diametre;
     }
+
+    /*public double getRayon(){
+        GraphMeasurer<String,DefaultWeightedEdge> gMesure = new GraphMeasurer<>(this.directedWeightedGraph);
+        return gMesure.getRadius();
+    }*/
 
     public void degreMoyen(HashMap<String, User> listUsers){
         //Le nombre moyen d'arêtes qui partent et débutent à partir d'un noeud.
     }
 
     public int getOrdre(){
-        //Nombre de noeuds du graphe
         return directedWeightedGraph.vertexSet().size();
-    }
-    public int getTaille_(){
-        //Nombre d'arête du graphe
-        int nombreArete = 0;
-        // Getting a Set of Key-value pairs
-        Set entrySet = this.listUsers.entrySet();
-        // Obtaining an iterator for the entry set
-        Iterator it = entrySet.iterator();
-        while (it.hasNext()) {
-            Map.Entry me = (Map.Entry) it.next();
-            User curr_User = (User) me.getValue();
-            Set entrySetRT = curr_User.getListReTweet().entrySet();
-            nombreArete += entrySetRT.size();
-        }
-        return nombreArete;
     }
     public int getTaille(){
         return directedWeightedGraph.edgeSet().size();
     }
     public double getDensite(){
-        //La densité d’un graphe est le nombre d’arêtes réalisées dans le graphe par
-        //rapport au nombre d’arêtes possibles
         float n = this.getOrdre();
         float t = this.getTaille();
-        double n_ = n * (n - 1);
-        return t / n_;
+        return t / (n * (n - 1));
     }
 
     private void createGraph(){
@@ -254,7 +244,7 @@ public class BaseDeTweets {
         BufferedReader csv = new BufferedReader(new FileReader("resources/" + file));
         String chaine;
         new BaseDeTweets();
-
+        long time = System.currentTimeMillis();
         directedWeightedGraph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         while ((chaine = csv.readLine()) != null) {
@@ -315,6 +305,21 @@ public class BaseDeTweets {
             }
         }
         csv.close();
+        reportPerformanceFor("graph allocation", time);
+    }
+    private static void reportPerformanceFor(String msg, long refTime)
+    {
+        double time = (System.currentTimeMillis() - refTime) / 1000.0;
+        double mem = usedMemory() / (1024.0 * 1024.0);
+        mem = Math.round(mem * 100) / 100.0;
+        System.out.println(msg + " (" + time + " sec, " + mem + "MB)");
+    }
+
+    private static long usedMemory()
+    {
+        Runtime rt = Runtime.getRuntime();
+
+        return rt.totalMemory() - rt.freeMemory();
     }
 
     //fdsf

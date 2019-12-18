@@ -207,6 +207,8 @@ public class InterfaceTweet extends Application {
                     System.out.println("Densité : "+bd.getDensite());
                     System.out.println("Taille : "+bd.getTaille());
                     System.out.println("Ordre : "+bd.getOrdre());
+                    System.out.println("Diamètre : "+bd.getDiametre());
+                   // System.out.println("Rayon : "+bd.getRayon());
                 }
                 catch(IOException ioe) {
                     showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Problème de lecture du fichier"+ioe);
