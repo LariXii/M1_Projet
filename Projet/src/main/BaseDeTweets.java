@@ -1,5 +1,8 @@
+package main;
+
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.io.*;
@@ -11,7 +14,7 @@ public class BaseDeTweets {
     private TreeSet<Tweet> baseTweets;
     private HashMap<String, User> listUsers;
     private HashMap<String, Vertex> listVertex;
-    private Graph<String,DefaultEdge> directedWeightedGraph;
+    private Graph<String,DefaultWeightedEdge> directedWeightedGraph;
 
     public BaseDeTweets() {
         this.baseTweets = new TreeSet<>();
@@ -128,27 +131,35 @@ public class BaseDeTweets {
         return t / n_;
     }
 
-   private void createGraph(){
-        Graph<String, DefaultEdge> g = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
-       // Getting a Set of Key-value pairs
-       Set entrySet = listVertex.entrySet();
-       // Obtaining an iterator for the entry set
-       Iterator it = entrySet.iterator();
-       //On parcourt tous les sommets
-       while (it.hasNext()) {
-           Map.Entry me = (Map.Entry) it.next();
-           Vertex sommet_curr = (Vertex) me.getValue();
-           g.addVertex(sommet_curr.getName());
-           //On récupére la liste de ses arêtes
-           Iterator itSucc = sommet_curr.getlEdges().iterator();
-           while(itSucc.hasNext()){
-               Edge e = (Edge)itSucc.next();
-               g.addEdge(e.getVertexOut(),e.getVertexIn());
-               g.setEdgeWeight(e.getVertexOut(),e.getVertexIn(),e.getWeight());
-           }
-       }
-       directedWeightedGraph = g;
-   }
+    private void createGraph(){
+        Graph<String, DefaultWeightedEdge> g = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        // Getting a Set of Key-value pairs
+        Set entrySet = listVertex.entrySet();
+        // Obtaining an iterator for the entry set
+        Iterator it = entrySet.iterator();
+        //On parcourt tous les sommets
+        while (it.hasNext()) {
+            Map.Entry me = (Map.Entry) it.next();
+            Vertex sommet_curr = (Vertex) me.getValue();
+
+            g.addVertex(sommet_curr.getName());
+
+            //On récupére la liste de ses arêtes
+            Set entrySuccessors = sommet_curr.getlSuccessors().entrySet();
+            Iterator itSucc = entrySuccessors.iterator();
+            while(itSucc.hasNext()){
+                Map.Entry meSucc = (Map.Entry)itSucc.next();
+                String vertexTarget = (String)meSucc.getKey();
+                int weightEdge = (int)meSucc.getValue();
+
+                if(!g.containsVertex(vertexTarget)){
+                    g.addVertex(vertexTarget);
+                }
+                g.addEdge(sommet_curr.getName(),vertexTarget);
+                g.setEdgeWeight(sommet_curr.getName(),vertexTarget,weightEdge);
+            }
+        }
+    }
 
     public void sauvegarder(String file) throws IOException, FileNotFoundException {
         //try {
@@ -198,7 +209,7 @@ public class BaseDeTweets {
                     reTweet = tabChaine[4];
                 }
                 //Création d'un objet Tweet
-                Tweet t = new Tweet(idTweet, idUser, date, texte, reTweet);
+                Tweet t = new Tweet(1, idUser, date, texte, reTweet);
                 //Ajout dans la base de tweet
                 baseTweets.add(t);
                 // Ajout de l'utilisateur dans la liste des utilisateurs et enregistrement du retweet de l'utilisateur
@@ -243,6 +254,9 @@ public class BaseDeTweets {
         BufferedReader csv = new BufferedReader(new FileReader("resources/" + file));
         String chaine;
         new BaseDeTweets();
+
+        directedWeightedGraph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
         while ((chaine = csv.readLine()) != null) {
             String[] tabChaine = chaine.split("\t");
             //On ne parcourt que les utilisateurs qui ont retweeté
@@ -253,7 +267,24 @@ public class BaseDeTweets {
                 //Récupération de l'id du retweet (sommet)
                 String idUserRT = tabChaine[4];
 
-                // Ajout de l'id de l'utilisateur dans la liste des sommets s'il n'existe pas déjà
+                //Ajout de l'utilisateur dans le graphe, s'il existe déjà le graphe n'est pas modifié
+                directedWeightedGraph.addVertex(idUser);
+                //Ajout de l'utilisateur retweeté dans le graphe, s'il existe déjà le graphe n'est pas modifié
+                directedWeightedGraph.addVertex(idUserRT);
+
+                //Ajout d'une arête entre les deux sommets
+                DefaultWeightedEdge dwe = directedWeightedGraph.getEdge(idUser,idUserRT);
+                if(dwe == null){
+                    if(!idUser.equals(idUserRT)){
+                        directedWeightedGraph.addEdge(idUser,idUserRT);
+                        directedWeightedGraph.setEdgeWeight(idUser,idUserRT,1);
+                    }
+                }
+                else{
+                    directedWeightedGraph.setEdgeWeight(dwe,directedWeightedGraph.getEdgeWeight(dwe));
+                }
+
+                /*// Ajout de l'id de l'utilisateur dans la liste des sommets s'il n'existe pas déjà
                 Vertex sommetUser = new Vertex(idUser);
                 listVertex.putIfAbsent(idUser, sommetUser);
 
@@ -280,11 +311,10 @@ public class BaseDeTweets {
                 else{
                     predecessors.put(idUser,predecessors.get(idUser) + 1);
                 }
+                i++;*/
             }
         }
         csv.close();
-        System.out.println("Il y a " + listVertex.size() + " utilisateurs qui ont tweeté");
-        this.createGraph();
     }
 
     //fdsf

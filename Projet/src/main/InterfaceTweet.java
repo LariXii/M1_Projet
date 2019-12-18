@@ -1,3 +1,5 @@
+package main;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -192,8 +194,8 @@ public class InterfaceTweet extends Application {
                     System.out.println("Total elapsed time in execution of method callMethod() is :"+ (endTime-startTime)/1000+" secondes");
                     /*if(lErr.size() != 0){
                         showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Les lignes suivantes sont au mauvais format "+lErr);
-                    }*/
-                    updateDataTableView(table);
+                    }
+                    updateDataTableView(table);*/
 
                     /*DecimalFormat df = new DecimalFormat("0.00000000"); // import java.text.DecimalFormat;
 
