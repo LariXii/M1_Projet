@@ -1,5 +1,3 @@
-package main;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -203,23 +201,21 @@ public class InterfaceTweet extends Application {
                     System.out.println("Densité : "+df.format(bd.getDensite()));
                     System.out.println("Taille : "+bd.getTaille());
                     System.out.println("Ordre : "+bd.getOrdre());*/
+                    long time = System.currentTimeMillis();
                     System.out.println("A partir de la base du graph :");
                     System.out.println("Densité : "+bd.getDensite());
                     System.out.println("Taille : "+bd.getTaille());
                     System.out.println("Ordre : "+bd.getOrdre());
                     System.out.println("Diamètre : "+bd.getDiametre());
-                   // System.out.println("Rayon : "+bd.getRayon());
+                    System.out.println("Page Rank : "+bd.getPageRank(5));
+                    System.out.println("Degre Moyen : "+bd.getMeanDegree());
+                    System.out.println("Degre Moyen In : "+bd.getMeanDegreeIn());
+                    System.out.println("Degre Moyen Out : "+bd.getMeanDegreeOut());
+                    System.out.println("Centralité par degré : "+bd.getDegreeCentrality(5));
+                    BaseDeTweets.reportPerformanceFor("After affichage",time);
                 }
                 catch(IOException ioe) {
                     showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Problème de lecture du fichier"+ioe);
-                }
-            }
-            else {
-                try {
-                    bd.sauvegarder(field_fichier.getText());
-                }
-                catch(IOException ioe) {
-                    showAlert(Alert.AlertType.ERROR,primaryStage,"Save error","Le fichier n'existe pas"+ioe);
                 }
             }
             windowForm.close();
@@ -296,9 +292,7 @@ public class InterfaceTweet extends Application {
                 return;
             }
 
-           // bd.ajouterNews(n);
             windowForm.close();
-            updateDataTableView(table);
         });
 
         cancelBut.setOnAction((ActionEvent e) -> {
@@ -331,17 +325,6 @@ public class InterfaceTweet extends Application {
 
         table.getColumns().addAll(idTweetCol, userTweetCol, dateTweetCol, textTweetCol, idReTweetCol);
         return table;
-    }
-
-    private void updateDataTableView(TableView<Tweet> table) {
-        ObservableList<Tweet> list = getNewsList();
-        table.setItems(list);
-    }
-
-    private ObservableList<Tweet> getNewsList(){
-        List<Tweet> list = new ArrayList<Tweet> (bd.getBaseTweets());
-        ObservableList<Tweet> obs_list = FXCollections.observableList(list);
-        return obs_list;
     }
 
 //lancement du prog

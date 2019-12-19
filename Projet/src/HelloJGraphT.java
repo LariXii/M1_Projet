@@ -1,7 +1,3 @@
-package main;
-
-//@example:uriCreate:begin
-
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
