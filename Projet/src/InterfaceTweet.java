@@ -35,8 +35,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
 
 //https://o7planning.org/fr/11079/tutoriel-javafx-tableview
 public class InterfaceTweet extends Application {

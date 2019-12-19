@@ -186,7 +186,7 @@ public class BaseDeTweets {
         csv.close();
         reportPerformanceFor("graph allocation", time);
     }
-    
+
     public static void reportPerformanceFor(String msg, long refTime) {
         double time = (System.currentTimeMillis() - refTime) / 1000.0;
         double mem = usedMemory() / (1024.0 * 1024.0);
