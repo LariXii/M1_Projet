@@ -3,6 +3,7 @@ import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.scoring.PageRank;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
@@ -10,6 +11,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BaseDeTweets {
     //private TreeSet<Tweet> baseTweets;
@@ -35,6 +37,18 @@ public class BaseDeTweets {
         //this.baseTweets = new TreeSet<>();
         //this.listUsers = new HashMap<>();
         //this.listVertex = new HashMap<>();
+    }
+
+    public Graph<String,DefaultWeightedEdge> getDirectedWeightedGraph(){
+        return directedWeightedGraph;
+    }
+
+    public AsSubgraph<String,DefaultWeightedEdge> getSubGraph(){
+        Set<String> vertices = directedWeightedGraph
+                .vertexSet().stream().filter(el -> directedWeightedGraph.degreeOf(el) > 100).collect(Collectors.toSet());
+        System.out.println(vertices.size());
+        AsSubgraph<String,DefaultWeightedEdge> subgraph = new AsSubgraph<>(directedWeightedGraph,vertices);
+        return subgraph;
     }
     /*****************************************************
      *          UTILISATEURS LES PLUS CENTRAUX           *
