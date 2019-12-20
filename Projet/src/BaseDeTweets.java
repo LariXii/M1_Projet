@@ -1,3 +1,4 @@
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -45,7 +46,7 @@ public class BaseDeTweets {
 
     public AsSubgraph<String,DefaultWeightedEdge> getSubGraph(){
         Set<String> vertices = directedWeightedGraph
-                .vertexSet().stream().filter(el -> directedWeightedGraph.degreeOf(el) > 100).collect(Collectors.toSet());
+                .vertexSet().stream().filter(el -> directedWeightedGraph.degreeOf(el) > 10).collect(Collectors.toSet());
         System.out.println(vertices.size());
         AsSubgraph<String,DefaultWeightedEdge> subgraph = new AsSubgraph<>(directedWeightedGraph,vertices);
         return subgraph;
@@ -92,6 +93,14 @@ public class BaseDeTweets {
      *          STATISTIQUE SUR LE GRAPHE           *
      ************************************************/
 
+    public double getMaxDegree(Graph<String, DefaultWeightedEdge> g){
+        double max = 0.0;
+        for(String s : g.vertexSet()){
+            if(max < g.degreeOf(s))
+                max = g.degreeOf(s);
+        }
+        return max;
+    }
     public double getDiametre(){
         long time = System.currentTimeMillis();
         double diametre = Double.NEGATIVE_INFINITY;
