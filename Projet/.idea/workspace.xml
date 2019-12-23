@@ -98,7 +98,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.selected.configurable" value="preferences.JavaFX" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -112,7 +112,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.main">
+  <component name="RunManager" selected="Application.Tutorial1">
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -131,16 +131,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterfaceNews" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="InterfaceNews" />
+    <configuration name="HelloJGraphT" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.HelloJGraphT" />
       <module name="Projet" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="InterfaceTweet" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="InterfaceTweet" />
+      <module name="Projet" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JGraphXAdapterDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="JGraphXAdapterDemo" />
       <module name="Projet" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -163,8 +176,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Test" />
+    <configuration name="Tutorial1" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Tutorial1" />
       <module name="Projet" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -218,17 +231,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.Main" />
-      <item itemvalue="Application.InterfaceNews" />
       <item itemvalue="Application.InterfaceTweet" />
-      <item itemvalue="Application.Test" />
       <item itemvalue="Application.main" />
+      <item itemvalue="Application.HelloJGraphT" />
+      <item itemvalue="Application.JGraphXAdapterDemo" />
+      <item itemvalue="Application.Tutorial1" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.main" />
+        <item itemvalue="Application.Tutorial1" />
+        <item itemvalue="Application.JGraphXAdapterDemo" />
         <item itemvalue="Application.InterfaceTweet" />
-        <item itemvalue="Application.Test" />
-        <item itemvalue="Application.InterfaceNews" />
+        <item itemvalue="Application.main" />
+        <item itemvalue="Application.HelloJGraphT" />
       </list>
     </recent_temporary>
   </component>

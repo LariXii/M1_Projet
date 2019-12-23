@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -32,9 +33,14 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 //https://o7planning.org/fr/11079/tutoriel-javafx-tableview
 public class InterfaceTweet extends Application {
@@ -89,9 +95,9 @@ public class InterfaceTweet extends Application {
         });
 
         MenuItem addNewItem = new MenuItem("Ajouter une nouvelle");
-        addNewItem.setOnAction((ActionEvent t) -> {
+        /*addNewItem.setOnAction((ActionEvent t) -> {
             createFormAddNew(primaryStage,table);
-        });
+        });*/
 
         MenuItem removeNewItem = new MenuItem("Supprimer une nouvelle");
         MenuItem searchNewItem = new MenuItem("Rechercher une nouvelle");
@@ -115,7 +121,12 @@ public class InterfaceTweet extends Application {
         menuBar.getMenus().addAll(fileMenu,editMenu,helpMenu);
 
         root.setTop(menuBar);
-        root.setCenter(table);
+        //root.setCenter(table);
+
+        Pane canvas = new Pane();
+        canvas.setStyle("-fx-background-color: black;");
+        canvas.setPrefSize(200,200);
+        root.setCenter(canvas);
 
         Scene scene = new Scene(root, 500, 500);
 
@@ -129,15 +140,27 @@ public class InterfaceTweet extends Application {
 
 
         openFileItem.setOnAction((ActionEvent t) -> {
-            createFormOpenSaveFile(true,primaryStage,table);
+            createFormOpenSaveFile(true,primaryStage,canvas);
         });
 
         saveFileItem.setOnAction((ActionEvent t) -> {
-            createFormOpenSaveFile(false,primaryStage,table);
+            createFormOpenSaveFile(false,primaryStage,canvas);
         });
     }
 
-    private void createFormOpenSaveFile(boolean open, Stage primaryStage, TableView<Tweet> table) {
+    private Circle createCircle(float poids, String name){
+        float radius = 1.0f;
+        Circle circle = new Circle();
+        if(poids > 0){
+            radius *= Math.sqrt(poids)/3;
+        }
+        circle.setRadius(radius);
+        circle.setFill(Color.BLUE);
+        circle.setAccessibleText(name);
+        return circle;
+    }
+
+    private void createFormOpenSaveFile(boolean open, Stage primaryStage, Pane p) {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -187,6 +210,25 @@ public class InterfaceTweet extends Application {
                     //ArrayList<Integer> lErr = bd.ouvrir(field_fichier.getText());
                     bd.ouvrir(field_fichier.getText());
                     long endTime = System.currentTimeMillis();
+                    Graph<String, DefaultWeightedEdge> g = bd.getDirectedWeightedGraph();
+                    int numVertex = 0;
+                    int i =1;
+                    for(String s : g.vertexSet()){
+                        float total = 0;
+                        for(DefaultWeightedEdge dwe :g.incomingEdgesOf(s)){
+                            total += g.getEdgeWeight(dwe);
+                        }
+                        Circle circle = createCircle(total,s);
+                        double x = 0 + i * circle.getRadius();
+                        double y = 50;
+                        circle.relocate(x,y);
+                        numVertex++;
+                        if(total > 3000 && i < 50){
+                            p.getChildren().add(circle);
+                            i++;
+                        }
+                    }
+
                     System.out.println("Total elapsed time in execution of method callMethod() is :"+ (endTime-startTime)/1000+" secondes");
                     /*if(lErr.size() != 0){
                         showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Les lignes suivantes sont au mauvais format "+lErr);
@@ -200,7 +242,7 @@ public class InterfaceTweet extends Application {
                     System.out.println("Taille : "+bd.getTaille());
                     System.out.println("Ordre : "+bd.getOrdre());*/
                     long time = System.currentTimeMillis();
-                    System.out.println("A partir de la base du graph :");
+                  /*  System.out.println("A partir de la base du graph :");
                     System.out.println("Densité : "+bd.getDensite());
                     System.out.println("Taille : "+bd.getTaille());
                     System.out.println("Ordre : "+bd.getOrdre());
@@ -209,7 +251,7 @@ public class InterfaceTweet extends Application {
                     System.out.println("Degre Moyen : "+bd.getMeanDegree());
                     System.out.println("Degre Moyen In : "+bd.getMeanDegreeIn());
                     System.out.println("Degre Moyen Out : "+bd.getMeanDegreeOut());
-                    System.out.println("Centralité par degré : "+bd.getDegreeCentrality(5));
+                    System.out.println("Centralité par degré : "+bd.getDegreeCentrality(5));*/
                     BaseDeTweets.reportPerformanceFor("After affichage",time);
                 }
                 catch(IOException ioe) {

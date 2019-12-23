@@ -1,8 +1,10 @@
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.scoring.PageRank;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
@@ -10,6 +12,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BaseDeTweets {
     //private TreeSet<Tweet> baseTweets;
@@ -35,6 +38,18 @@ public class BaseDeTweets {
         //this.baseTweets = new TreeSet<>();
         //this.listUsers = new HashMap<>();
         //this.listVertex = new HashMap<>();
+    }
+
+    public Graph<String,DefaultWeightedEdge> getDirectedWeightedGraph(){
+        return directedWeightedGraph;
+    }
+
+    public AsSubgraph<String,DefaultWeightedEdge> getSubGraph(){
+        Set<String> vertices = directedWeightedGraph
+                .vertexSet().stream().filter(el -> directedWeightedGraph.degreeOf(el) > 10).collect(Collectors.toSet());
+        System.out.println(vertices.size());
+        AsSubgraph<String,DefaultWeightedEdge> subgraph = new AsSubgraph<>(directedWeightedGraph,vertices);
+        return subgraph;
     }
     /*****************************************************
      *          UTILISATEURS LES PLUS CENTRAUX           *
@@ -78,6 +93,14 @@ public class BaseDeTweets {
      *          STATISTIQUE SUR LE GRAPHE           *
      ************************************************/
 
+    public double getMaxDegree(Graph<String, DefaultWeightedEdge> g){
+        double max = 0.0;
+        for(String s : g.vertexSet()){
+            if(max < g.degreeOf(s))
+                max = g.degreeOf(s);
+        }
+        return max;
+    }
     public double getDiametre(){
         long time = System.currentTimeMillis();
         double diametre = Double.NEGATIVE_INFINITY;
