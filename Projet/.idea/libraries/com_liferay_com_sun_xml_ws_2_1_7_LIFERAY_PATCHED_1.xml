@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="com.liferay:com.sun.xml.ws:2.1.7.LIFERAY-PATCHED-1" type="repository">
+    <properties maven-id="com.liferay:com.sun.xml.ws:2.1.7.LIFERAY-PATCHED-1" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/com.sun.xml.ws-2.1.7.LIFERAY-PATCHED-1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

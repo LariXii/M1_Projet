@@ -7,7 +7,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="org.jgrapht:jgrapht-demo:1.3.1" level="project" />
     <orderEntry type="library" name="org.graphstream:gs-algo:1.3" level="project" />
+    <orderEntry type="library" name="org.graphstream:gs-algo:1.3" level="project" />
+    <orderEntry type="library" name="org.jgrapht:jgrapht-core:1.3.0" level="project" />
+    <orderEntry type="library" name="com.github.vlsi.mxgraph:jgraphx:4.0.5" level="project" />
+    <orderEntry type="library" name="org.jgrapht:jgrapht-core:1.3.1" level="project" />
+    <orderEntry type="library" name="org.jgrapht:jgrapht-demo:1.3.1" level="project" />
+    <orderEntry type="library" name="com.liferay:com.sun.xml.ws:2.1.7.LIFERAY-PATCHED-1" level="project" />
   </component>
 </module>
