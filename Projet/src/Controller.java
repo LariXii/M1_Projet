@@ -24,11 +24,29 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.text.DecimalFormat;
+import java.util.Map;
+import java.util.Set;
 
 
 public class Controller  {
     @FXML
+    private Label densite;
+    @FXML
+    private Label taille;
+    @FXML
+    private Label ordre;
+    @FXML
     private Label diametre;
+    @FXML
+    private Label page_rk;
+    @FXML
+    private Label degre_moy;
+    @FXML
+    private Label degre_moy_in;
+    @FXML
+    private Label degre_moy_out;
+    @FXML
+    private Label centralite;
     @FXML
     private void ouvrir() {
 
@@ -138,10 +156,27 @@ public class Controller  {
                     updateDataTableView(table);*/
 
                     DecimalFormat df = new DecimalFormat("0.00000000");
-                    double densite = bd.getDensite();
-                    diametre.setText(String.valueOf(densite));
-                    //System.out.println("A partir de la base de tweet :");
+                    double dens = bd.getDensite();
+                    densite.setText(String.valueOf(dens));
 
+                    int taille_var = bd.getTaille();
+                    taille.setText(String.valueOf(taille_var));
+                    int ordre_var = bd.getOrdre();
+                    ordre.setText(String.valueOf(ordre_var));
+                    double diametre_var = bd.getDiametre();
+                    diametre.setText(String.valueOf(diametre_var));
+                    Set<Map.Entry<String, Double>> page_r = bd.getPageRank(5);
+                    page_rk.setText(String.valueOf(page_r));
+
+                    double meandegree = bd.getMeanDegree();
+                    degre_moy.setText(String.valueOf(meandegree));
+                    double meandegreein = bd.getMeanDegreeIn();
+                    degre_moy_in.setText(String.valueOf(meandegreein));
+                    double meandegreeout = bd.getMeanDegreeOut();
+                    degre_moy_out.setText(String.valueOf(meandegreeout));
+                    Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
+                    centralite.setText(String.valueOf(centr));
+                    //System.out.println("A partir de la base de tweet :");
                    // System.out.println("Taille : "+bd.getTaille());
                     //System.out.println("Ordre : "+bd.getOrdre());
                     long time = System.currentTimeMillis();
