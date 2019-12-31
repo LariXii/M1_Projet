@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -17,7 +18,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.view.Viewer;
 import org.jgrapht.Graph;
+import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -47,6 +51,8 @@ public class Controller  {
     private Label degre_moy_out;
     @FXML
     private Label centralite;
+    @FXML
+    private AreaChart graph;
     @FXML
     private void ouvrir() {
 
@@ -176,6 +182,10 @@ public class Controller  {
                     degre_moy_out.setText(String.valueOf(meandegreeout));
                     Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
                     centralite.setText(String.valueOf(centr));
+
+                    JGraphTTOGraphStream(bd.getSubGraph(),bd.getMaxDegree(bd.getSubGraph()));
+
+
                     //System.out.println("A partir de la base de tweet :");
                    // System.out.println("Taille : "+bd.getTaille());
                     //System.out.println("Ordre : "+bd.getOrdre());
@@ -216,6 +226,44 @@ public class Controller  {
         circle.setAccessibleText(name);
         return circle;
     }
+
+    private static void JGraphTTOGraphStream(org.jgrapht.Graph<String, org.jgrapht.graph.DefaultWeightedEdge> dwGraph, double maxWeight){
+        org.graphstream.graph.Graph g = new SingleGraph("Foot");
+        g.setStrict(true);
+
+        g.addAttribute("ui.antialias");
+        g.addAttribute("ui.quality");
+        g.addAttribute("ui.stylesheet", "node {size: 5px;size-mode: dyn-size;fill-color: BLUE;text-mode: hidden;z-index: 3;}edge {shape: line;fill-color: #222;arrow-size: 3px, 2px; size: 0px;}");
+
+        double taille_max = 10;
+        //Ajout des arêtes
+        Set<DefaultWeightedEdge> edges = dwGraph.edgeSet();
+        for(DefaultWeightedEdge dwe : edges){
+            double weight = dwGraph.getEdgeWeight(dwe);
+            String source = dwGraph.getEdgeSource(dwe);
+            String target = dwGraph.getEdgeTarget(dwe);
+            //Ajout du sommet source s'il n'est pas présent dans le graphe
+            if (g.getNode(source) == null) {
+                g.addNode(source);
+                double sourceWeight = dwGraph.degreeOf(source);
+                g.getNode(source).addAttribute("ui.size", (sourceWeight*taille_max)/maxWeight);
+                System.out.println("Degré du sommet "+source+" est de : "+sourceWeight+" pixels");
+            }
+            //Ajout du sommet cible s'il n'est pas présent dans le graphe
+            if(g.getNode(target) == null) {
+                g.addNode(target);
+                double targetWeight = dwGraph.degreeOf(target);
+                g.getNode(target).addAttribute("ui.size", (targetWeight*taille_max)/maxWeight);
+                System.out.println("Degré du sommet "+target+" est de : "+targetWeight+" pixels");
+            }
+            //Ajout de l'arête entre les deux sommets
+            org.graphstream.graph.Edge e = g.addEdge(source+"|"+target,source,target,true);
+            //Ajout du poid sur l'arête
+            e.setAttribute("weight",weight);
+        }
+        Viewer view = g.display(true);
+    }
+
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
