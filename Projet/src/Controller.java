@@ -1,6 +1,8 @@
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -10,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -21,6 +24,7 @@ import javafx.stage.Window;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.view.Viewer;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.scoring.PageRank;
 import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import javafx.stage.Stage;
@@ -28,6 +32,8 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,7 +58,11 @@ public class Controller  {
     @FXML
     private Label centralite;
     @FXML
-    private AreaChart graph;
+    private TableView<PageRank> page_rk_tab;
+    @FXML
+    private TableColumn<String, String> page_rk_user;
+    @FXML
+    private AnchorPane jgraph;
     @FXML
     private void ouvrir() {
 
@@ -150,7 +160,7 @@ public class Controller  {
                         circle.relocate(x,y);
                         numVertex++;
                         if(total > 3000 && i < 50){
-                            p.getChildren().add(circle);
+                            jgraph.getChildren().add(circle);
                             i++;
                         }
                     }
@@ -183,7 +193,22 @@ public class Controller  {
                     Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
                     centralite.setText(String.valueOf(centr));
 
-                    JGraphTTOGraphStream(bd.getSubGraph(),bd.getMaxDegree(bd.getSubGraph()));
+
+
+                    // Create column UserName (Data type of String).
+                    TableColumn<PageRank, String> PageRankUser = new TableColumn<PageRank, String>("User");
+                    PageRankUser.setCellValueFactory(new PropertyValueFactory<>("User"));
+
+                    // Create column Email (Data type of String).
+                    TableColumn<PageRank, Double> PageRankValue = new TableColumn<PageRank, Double>("value");
+                    PageRankValue.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+
+
+                    page_rk_tab.getColumns().addAll(PageRankUser,PageRankValue);
+                    ObservableList<PageRank> list = getNewsList();
+                    page_rk_tab.setItems(list);
+
+
 
 
                     //System.out.println("A partir de la base de tweet :");
@@ -214,7 +239,12 @@ public class Controller  {
         });
 
     }
+    private ObservableList<PageRank> getNewsList(){
 
+        List<PageRank> list = new ArrayList<PageRank>(bd.getOrdre());
+        ObservableList<PageRank> obs_list = FXCollections.observableList(list);
+        return obs_list;
+    }
     private Circle createCircle(float poids, String name){
         float radius = 1.0f;
         Circle circle = new Circle();

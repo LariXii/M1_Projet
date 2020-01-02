@@ -114,10 +114,10 @@
                                     </AnchorPane>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                         <children>
-                                            <TableView layoutX="95.0" layoutY="24.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <TableView fx:id="page_rk_tab" layoutX="95.0" layoutY="24.0" prefHeight="164.0" prefWidth="191.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="0.0">
                                                 <columns>
-                                                    <TableColumn prefWidth="75.0" text="C1" />
-                                                    <TableColumn fx:id="information" prefWidth="75.0" text="C2" />
+                                                    <TableColumn fx:id="page_rk_user" prefWidth="72.0" text="Page Rank" />
+                                                    <TableColumn fx:id="page_rk_value" prefWidth="79.0" text="C1" />
                                                 </columns>
                                             </TableView>
                                         </children>
@@ -127,7 +127,7 @@
                             </SplitPane>
                         </children>
                     </AnchorPane>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <AnchorPane fx:id="jgraph" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                         <children>
                             <ImageView fitHeight="33.0" fitWidth="48.0" layoutX="396.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                 <image>
