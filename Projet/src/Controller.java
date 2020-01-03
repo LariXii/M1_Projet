@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Callback;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.view.Viewer;
 import org.jgrapht.Graph;
@@ -36,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 
 public class Controller  {
     @FXML
@@ -60,9 +61,13 @@ public class Controller  {
     @FXML
     private TableView<PageRank> page_rk_tab;
     @FXML
-    private TableColumn<String, String> page_rk_user;
+    private TableColumn<PageRank, String> page_rk_user;
+    @FXML
+    private ListView pageRUser;
     @FXML
     private AnchorPane jgraph;
+
+
     @FXML
     private void ouvrir() {
 
@@ -70,6 +75,7 @@ public class Controller  {
         System.out.print("ic ");
 
     }
+    private ObservableList<PageRank> pageRankData = FXCollections.observableArrayList();
 
 
     //objets graphiques représentant un cercle
@@ -96,7 +102,10 @@ public class Controller  {
         primaryStage.show();
     }
 
+
+
     private void createFormOpenSaveFile(boolean open, Pane p) {
+
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -194,19 +203,39 @@ public class Controller  {
                     centralite.setText(String.valueOf(centr));
 
 
+                    Set<Map.Entry<String, Double>> pageR = bd.getPageRank(5);
 
+
+
+
+                    /*
+                    this.page_rk_tab = new TableView<>();
+                    page_r = FXCollections.observableArrayList(Map.entrySet());
+                    TableColumn<Map.Entry<String, String>, String> PageRankUser = new TableColumn<Map.Entry<String, String>, String>();
+
+                    PageRankUser.setCellValueFactory((TableColumn.CellDataFeatures<Map.Entry<String, String>, String> vl) -> new SimpleStringProperty(vl.getValue().getValue()));
+                    this.page_rk_tab.getColumns().setAll(PageRankUser);
+
+                       */
                     // Create column UserName (Data type of String).
-                    TableColumn<PageRank, String> PageRankUser = new TableColumn<PageRank, String>("User");
+                    TableColumn<String, Double> PageRankUser = new TableColumn<String, Double>("User");
                     PageRankUser.setCellValueFactory(new PropertyValueFactory<>("User"));
 
                     // Create column Email (Data type of String).
                     TableColumn<PageRank, Double> PageRankValue = new TableColumn<PageRank, Double>("value");
-                    PageRankValue.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+                    PageRankValue.setCellValueFactory(new PropertyValueFactory<>("Value"));
 
 
-                    page_rk_tab.getColumns().addAll(PageRankUser,PageRankValue);
+
+                    for (Map.Entry<String, Double> it: pageR) {
+                        String user = it.getKey();
+                        double info = it.getValue();
+
+                    }
+
+
                     ObservableList<PageRank> list = getNewsList();
-                    page_rk_tab.setItems(list);
+                    pageRUser.setItems(list);
 
 
 
