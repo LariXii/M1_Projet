@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,12 +33,10 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Controller  {
     @FXML
@@ -59,14 +58,11 @@ public class Controller  {
     @FXML
     private Label centralite;
     @FXML
-    private TableView<PageRank> page_rk_tab;
+    private TableView<pageRank> page_rk_tab;
     @FXML
     private TableColumn<PageRank, String> page_rk_user;
     @FXML
-    private ListView pageRUser;
-    @FXML
     private AnchorPane jgraph;
-
 
     @FXML
     private void ouvrir() {
@@ -203,11 +199,6 @@ public class Controller  {
                     centralite.setText(String.valueOf(centr));
 
 
-                    Set<Map.Entry<String, Double>> pageR = bd.getPageRank(5);
-
-
-
-
                     /*
                     this.page_rk_tab = new TableView<>();
                     page_r = FXCollections.observableArrayList(Map.entrySet());
@@ -216,14 +207,83 @@ public class Controller  {
                     PageRankUser.setCellValueFactory((TableColumn.CellDataFeatures<Map.Entry<String, String>, String> vl) -> new SimpleStringProperty(vl.getValue().getValue()));
                     this.page_rk_tab.getColumns().setAll(PageRankUser);
 
-                       */
+
                     // Create column UserName (Data type of String).
-                    TableColumn<String, Double> PageRankUser = new TableColumn<String, Double>("User");
+                    TableColumn<String, String> PageRankUser = new TableColumn<String, Double>("User");
                     PageRankUser.setCellValueFactory(new PropertyValueFactory<>("User"));
 
                     // Create column Email (Data type of String).
                     TableColumn<PageRank, Double> PageRankValue = new TableColumn<PageRank, Double>("value");
                     PageRankValue.setCellValueFactory(new PropertyValueFactory<>("Value"));
+
+                    page_rk_tab.getColumns().addAll( PageRankUser, PageRankValue);
+ */
+
+
+                    /*
+                    TableColumn<Tweet, Long> idTweetCol = new TableColumn<Tweet, Long>("ID");
+                    idTweetCol.setCellValueFactory(new PropertyValueFactory<>("idTweet"));
+
+                    // Create column Email (Data type of String).
+                    TableColumn<Tweet, String> userTweetCol = new TableColumn<Tweet, String>("User");
+                    userTweetCol.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+
+                    // Create column FullName (Data type of String).
+                    TableColumn<Tweet, LocalDate> dateTweetCol = new TableColumn<Tweet, LocalDate>("Date");
+                    dateTweetCol.setCellValueFactory(new PropertyValueFactory<>("dateTweet"));
+                    // Active Column
+                    TableColumn<Tweet, String> textTweetCol = new TableColumn<Tweet, String>("Texte");
+                    textTweetCol.setCellValueFactory(new PropertyValueFactory<>("textTweet"));
+
+                    TableColumn<Tweet, String> idReTweetCol = new TableColumn<Tweet, String>("ReTweet");
+                    idReTweetCol.setCellValueFactory(new PropertyValueFactory<>("idReTweet"));
+
+                    page_rk_tab.getColumns().addAll(idTweetCol, userTweetCol, dateTweetCol, textTweetCol, idReTweetCol);
+
+
+                     */
+// Create column UserName (Data type of String).
+
+
+                    TableColumn<pageRank, String> userNameCol //
+                            = new TableColumn<pageRank, String>("User Name");
+
+                    // Create column Email (Data type of String).
+                    TableColumn<pageRank, Double> scorecol//
+                            = new TableColumn<pageRank, Double>("score");
+
+
+
+                    // Add sub columns to the FullName
+                    page_rk_tab.getColumns().addAll(userNameCol, scorecol);
+
+
+
+                    // Defines how to fill data for each cell.
+                    // Get value from property of UserAccount. .
+                    userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
+                    scorecol.setCellValueFactory(new PropertyValueFactory<>("score"));
+
+
+                    // Set Sort type for userName column
+                    userNameCol.setSortType(TableColumn.SortType.DESCENDING);
+                    scorecol.setSortable(false);
+
+                    // Display row data
+                    //ObservableList<pageRank> list = getUserList();
+                    //page_rk_tab.setItems(list);
+
+                    page_rk_tab.getColumns().addAll(userNameCol, scorecol);
+
+
+
+
+
+
+                    Set<Map.Entry<String, Double>> pageR = bd.getPageRank(5);
+                   // page_rk_user.setCellValueFactory();
+
+
 
 
 
@@ -231,11 +291,10 @@ public class Controller  {
                         String user = it.getKey();
                         double info = it.getValue();
 
+
                     }
 
 
-                    ObservableList<PageRank> list = getNewsList();
-                    pageRUser.setItems(list);
 
 
 
@@ -268,12 +327,23 @@ public class Controller  {
         });
 
     }
-    private ObservableList<PageRank> getNewsList(){
+/*
+    private ObservableList<pageRank> getUserList() {
 
-        List<PageRank> list = new ArrayList<PageRank>(bd.getOrdre());
-        ObservableList<PageRank> obs_list = FXCollections.observableList(list);
-        return obs_list;
-    }
+        Set<Map.Entry<String, Double>> users = bd.getPageRank(5);
+
+        for (Map.Entry<String, Double> it: users) {
+            String user = it.getKey();
+            double info = it.getValue();
+            ObservableList<pageRank> list = FXCollections.observableArrayList(user,info);
+
+        }
+
+        return list;
+            }
+
+ */
+
     private Circle createCircle(float poids, String name){
         float radius = 1.0f;
         Circle circle = new Circle();
