@@ -1,4 +1,5 @@
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
+//import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
+import org.graphstream.algorithm.Toolkit;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -46,7 +47,7 @@ public class BaseDeTweets {
 
     public AsSubgraph<String,DefaultWeightedEdge> getSubGraph(){
         Set<String> vertices = directedWeightedGraph
-                .vertexSet().stream().filter(el -> directedWeightedGraph.degreeOf(el) > 10).collect(Collectors.toSet());
+                .vertexSet().stream().filter(el -> directedWeightedGraph.degreeOf(el) > 100).collect(Collectors.toSet());
         System.out.println(vertices.size());
         AsSubgraph<String,DefaultWeightedEdge> subgraph = new AsSubgraph<>(directedWeightedGraph,vertices);
         return subgraph;
@@ -134,7 +135,7 @@ public class BaseDeTweets {
         long total = 0;
         //Le nombre moyen d'arêtes qui partent et débutent à partir d'un noeud.
         for(String s : directedWeightedGraph.vertexSet()){
-            total += directedWeightedGraph.inDegreeOf(s) + directedWeightedGraph.outDegreeOf(s);
+            total += directedWeightedGraph.degreeOf(s);
         }
         return total / (double)getOrdre();
     }

@@ -3,6 +3,9 @@ import org.graphstream.algorithm.generator.GridGenerator;
 import org.graphstream.algorithm.generator.RandomGenerator;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
+import org.graphstream.ui.layout.Layout;
+import org.graphstream.ui.layout.springbox.implementations.LinLog;
+import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 import org.graphstream.ui.view.Viewer;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -53,7 +56,7 @@ public class Tutorial1 {
 
         g.addAttribute("ui.antialias");
         g.addAttribute("ui.quality");
-        g.addAttribute("ui.stylesheet", "node {size: 5px;size-mode: dyn-size;fill-color: BLUE;text-mode: hidden;z-index: 3;}edge {shape: line;fill-color: #222;arrow-size: 3px, 2px; size: 0px;}");
+        g.addAttribute("ui.stylesheet", "node {size: 4px;fill-color: BLUE;text-mode: hidden;z-index: 3;}edge {shape: line;fill-color: #222;arrow-size: 3px, 2px; size: 0px;}");
 
         double taille_max = 50;
         //Ajout des arêtes
@@ -66,21 +69,68 @@ public class Tutorial1 {
             if (g.getNode(source) == null) {
                 g.addNode(source);
                 double sourceWeight = dwGraph.degreeOf(source);
-                g.getNode(source).addAttribute("ui.size", (sourceWeight*taille_max)/maxWeight);
-                System.out.println("Degré du sommet "+source+" est de : "+sourceWeight+" pixels");
+                g.getNode(source).addAttribute("layout.weight", sourceWeight);
+                //g.getNode(source).addAttribute("ui.size", (sourceWeight*taille_max)/maxWeight);
+                //System.out.println("Degré du sommet "+source+" est de : "+sourceWeight+" pixels");
             }
             //Ajout du sommet cible s'il n'est pas présent dans le graphe
             if(g.getNode(target) == null) {
                 g.addNode(target);
                 double targetWeight = dwGraph.degreeOf(target);
-                g.getNode(target).addAttribute("ui.size", (targetWeight*taille_max)/maxWeight);
-                System.out.println("Degré du sommet "+target+" est de : "+targetWeight+" pixels");
+                g.getNode(source).addAttribute("layout.weight", targetWeight);
+                //g.getNode(target).addAttribute("ui.size", (targetWeight*taille_max)/maxWeight);
+                //System.out.println("Degré du sommet "+target+" est de : "+targetWeight+" pixels");
+            }
+            //Ajout de l'arête entre les deux sommets
+            org.graphstream.graph.Edge e = g.addEdge(source+"|"+target,source,target,true);
+            //Ajout du poid sur l'arête
+            e.setAttribute("weight",weight);
+
+        }
+        Layout layout = new LinLog();
+        //g.addSink(layout);
+        //layout.addAttributeSink(g);
+        Viewer v = g.display(true);
+        v.enableAutoLayout(layout);
+        layout.setForce(200);
+        layout.setQuality(0);
+        while(layout.getStabilization() < 0.9){
+            layout.compute();
+        }
+        System.out.println(layout.getStabilization());
+    }
+
+    public static org.graphstream.graph.Graph JGraphTTOGraphStream(org.jgrapht.Graph<String, org.jgrapht.graph.DefaultWeightedEdge> dwGraph){
+        org.graphstream.graph.Graph g = new SingleGraph("Foot");
+        g.setStrict(true);
+
+        //Ajout des arêtes
+        Set<DefaultWeightedEdge> edges = dwGraph.edgeSet();
+        for(DefaultWeightedEdge dwe : edges){
+            double weight = dwGraph.getEdgeWeight(dwe);
+            String source = dwGraph.getEdgeSource(dwe);
+            String target = dwGraph.getEdgeTarget(dwe);
+            //Ajout du sommet source s'il n'est pas présent dans le graphe
+            if (g.getNode(source) == null) {
+                g.addNode(source);
+            }
+            //Ajout du sommet cible s'il n'est pas présent dans le graphe
+            if(g.getNode(target) == null) {
+                g.addNode(target);
             }
             //Ajout de l'arête entre les deux sommets
             org.graphstream.graph.Edge e = g.addEdge(source+"|"+target,source,target,true);
             //Ajout du poid sur l'arête
             e.setAttribute("weight",weight);
         }
-        Viewer view = g.display(true);
+
+        //Ajout des sommets
+        Set<String> vertices = dwGraph.vertexSet();
+        for(String v : vertices){
+            if (g.getNode(v) == null) {
+                g.addNode(v);
+            }
+        }
+        return g;
     }
 }
