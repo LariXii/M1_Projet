@@ -47,7 +47,7 @@ public class Tutorial1 {
         catch(IOException ioe){
             System.out.println("Erreur : Open file");
         }
-        JGraphTTOGraphStream(bd.getSubGraph(),bd.getMaxDegree(bd.getSubGraph()));
+        JGraphTTOGraphStream(bd.getSubGraph(100),bd.getMaxDegree(bd.getSubGraph(100)));
     }
 
     private static void JGraphTTOGraphStream(org.jgrapht.Graph<String, org.jgrapht.graph.DefaultWeightedEdge> dwGraph, double maxWeight){
