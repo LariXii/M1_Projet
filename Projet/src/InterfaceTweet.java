@@ -242,7 +242,7 @@ public class InterfaceTweet extends Application {
                     System.out.println("Taille : "+bd.getTaille());
                     System.out.println("Ordre : "+bd.getOrdre());*/
                     long time = System.currentTimeMillis();
-                  /*  System.out.println("A partir de la base du graph :");
+                    System.out.println("A partir de la base du graph :");
                     System.out.println("Densité : "+bd.getDensite());
                     System.out.println("Taille : "+bd.getTaille());
                     System.out.println("Ordre : "+bd.getOrdre());
@@ -251,7 +251,7 @@ public class InterfaceTweet extends Application {
                     System.out.println("Degre Moyen : "+bd.getMeanDegree());
                     System.out.println("Degre Moyen In : "+bd.getMeanDegreeIn());
                     System.out.println("Degre Moyen Out : "+bd.getMeanDegreeOut());
-                    System.out.println("Centralité par degré : "+bd.getDegreeCentrality(5));*/
+                    System.out.println("Centralité par degré : "+bd.getDegreeCentrality(5));
                     BaseDeTweets.reportPerformanceFor("After affichage",time);
                 }
                 catch(IOException ioe) {

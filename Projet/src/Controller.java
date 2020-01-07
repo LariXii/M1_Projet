@@ -64,7 +64,7 @@ public class Controller  {
     @FXML
     private ProgressBar temps;
     @FXML
-    private TableView<pageRank> page_rk_tab;
+    private TableView<CentralUser> page_rk_tab;
     @FXML
     private TableColumn<PageRank, String> page_rk_user;
     @FXML
@@ -177,8 +177,13 @@ public class Controller  {
                     double diametre_var = bd.getDiametre();
                     diametre.setText(String.valueOf(diametre_var));
 
+
                    // Set<Map.Entry<String, Double>> page_r = bd.getPageRank(5);
                     //page_rk.setText(String.valueOf(page_r));
+
+                   // Set<CentralUser> page_r = bd.getPageRank(5);
+                    //page_rk.setText(String.valueOf(page_r));
+
 
                     double meandegree = bd.getMeanDegree();
                     degre_moy.setText(String.valueOf(meandegree));
@@ -186,8 +191,13 @@ public class Controller  {
                     degre_moy_in.setText(String.valueOf(meandegreein));
                     double meandegreeout = bd.getMeanDegreeOut();
                     degre_moy_out.setText(String.valueOf(meandegreeout));
+
                    // Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
                     //centralite.setText(String.valueOf(centr));
+
+                    //Set<CentralUser> centr = bd.getDegreeCentrality(5);
+                    //centralite.setText(String.valueOf(centr));
+
 
 
                     /*
@@ -237,6 +247,30 @@ public class Controller  {
 // Create column UserName (Data type of String).
 
 
+                    TableColumn<CentralUser, String> userNameCol //
+                            = new TableColumn<CentralUser, String>("userName");
+
+                    // Create column Email (Data type of String).
+                    TableColumn<CentralUser, Double> scorecol//
+                            = new TableColumn<CentralUser, Double>("score");
+
+
+
+                    // Add sub columns to the FullName
+                    page_rk_tab.getColumns().addAll(userNameCol, scorecol);
+
+
+
+                    // Defines how to fill data for each cell.
+                    // Get value from property of UserAccount. .
+                    userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
+                    scorecol.setCellValueFactory(new PropertyValueFactory<>("score"));
+
+
+                    // Set Sort type for userName column
+                    userNameCol.setSortType(TableColumn.SortType.DESCENDING);
+                    scorecol.setSortable(false);
+                    
                     // Display row data
                     //ObservableList<pageRank> list = getUserList();
                     //page_rk_tab.setItems(list);
@@ -247,19 +281,8 @@ public class Controller  {
 
 
 
-                    Set<Map.Entry<String, Double>> pageR = bd.getPageRank(5);
+                    Set<CentralUser> pageR = bd.getPageRank(5);
                    // page_rk_user.setCellValueFactory();
-
-
-
-
-
-                    for (Map.Entry<String, Double> it: pageR) {
-                        String user = it.getKey();
-                        double info = it.getValue();
-
-
-                    }
 
 
 
