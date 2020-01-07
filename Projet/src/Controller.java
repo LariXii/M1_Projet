@@ -67,7 +67,16 @@ public class Controller  {
     private ProgressBar temps;
     @FXML
     private TableView<CentralUser> page_rk_tab;
-
+    @FXML
+    private TableColumn<CentralUser, String> page_rk_user;
+    @FXML
+    private TableColumn<CentralUser, Double> page_rk_score;
+    @FXML
+    private TableView<CentralUser> centr;
+    @FXML
+    private TableColumn<CentralUser, String> centr_user;
+    @FXML
+    private TableColumn<CentralUser, Double> centr_score;
     @FXML
     private AnchorPane jgraph;
 
@@ -253,17 +262,27 @@ public class Controller  {
                      */
 // Create column UserName (Data type of String).
 
-                    TableColumn<CentralUser, String> userName = new TableColumn<CentralUser, String>("userName");
-                    userName.setCellValueFactory(new PropertyValueFactory<>("UserName"));
+                   // TableColumn<CentralUser, String> userName = new TableColumn<CentralUser, String>("userName");
+                    page_rk_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
 
                     // Create column Email (Data type of String).
-                    TableColumn<CentralUser, Double> score = new TableColumn<CentralUser, Double>("score");
-                    score.setCellValueFactory(new PropertyValueFactory<>("score"));
-                    page_rk_tab.getColumns().addAll(userName, score);
+                  //  TableColumn<CentralUser, Double> score = new TableColumn<CentralUser, Double>("score");
+                    page_rk_score.setCellValueFactory(new PropertyValueFactory<>("score"));
+                    //page_rk_tab.getColumns().addAll(userName, score);
 
-                    ObservableList<CentralUser> list = getNewsList();
+                    ObservableList<CentralUser> list = getNewsListPR();
                     page_rk_tab.setItems(list);
 
+
+                    centr_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
+
+                    // Create column Email (Data type of String).
+                    //  TableColumn<CentralUser, Double> score = new TableColumn<CentralUser, Double>("score");
+                    centr_score.setCellValueFactory(new PropertyValueFactory<>("score"));
+                    //page_rk_tab.getColumns().addAll(userName, score);
+
+                    ObservableList<CentralUser> listCentr = getNewsListCentr();
+                    centr.setItems(listCentr);
 
                     // Create column Email (Data type of String).
                    // TableColumn<CentralUser, Double> scorecol//
@@ -298,8 +317,13 @@ public class Controller  {
                 }
 
         }
-    private ObservableList<CentralUser> getNewsList(){
+    private ObservableList<CentralUser> getNewsListPR(){
         List<CentralUser> list = new ArrayList<CentralUser> (bd.getPageRank(5));
+        ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
+        return obs_list;
+    }
+    private ObservableList<CentralUser> getNewsListCentr(){
+        List<CentralUser> list = new ArrayList<CentralUser> (bd.getDegreeCentrality(5));
         ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
         return obs_list;
     }
