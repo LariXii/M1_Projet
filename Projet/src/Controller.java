@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -33,6 +34,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.text.DecimalFormat;
@@ -47,31 +49,41 @@ public class Controller  {
     private Label ordre;
     @FXML
     private Label diametre;
-    @FXML
-    private Label page_rk;
+    //@FXML
+    //private Label page_rk;
     @FXML
     private Label degre_moy;
     @FXML
     private Label degre_moy_in;
     @FXML
     private Label degre_moy_out;
+   // @FXML
+    //private Label centralite;
     @FXML
-    private Label centralite;
+    private TextField fichier;
+    @FXML
+    private Button fichier_ok;
+    @FXML
+    private ProgressBar temps;
     @FXML
     private TableView<CentralUser> page_rk_tab;
-    @FXML
-    private TableColumn<PageRank, String> page_rk_user;
+
     @FXML
     private AnchorPane jgraph;
 
     @FXML
     private void ouvrir() {
 
-        createFormOpenSaveFile(true,canvas);
-        System.out.print("ic ");
+        execution();
+
 
     }
-    private ObservableList<PageRank> pageRankData = FXCollections.observableArrayList();
+    private ObservableList<CentralUser> userData = FXCollections.observableArrayList();
+
+    public ObservableList<CentralUser> getPersonData() {
+        return userData;
+    }
+
 
 
     //objets graphiques représentant un cercle
@@ -84,24 +96,9 @@ public class Controller  {
 
 //definir la troupe des objets graphiques
 
-    Group root;
-    Pane canvas = new Pane();
-    public void start(Stage primaryStage) {
-        construireScene(primaryStage);
-    }
 
-    void construireScene(Stage primaryStage) {
-
-        Scene scene = new Scene(root, 500, 500);
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-
-
-    private void createFormOpenSaveFile(boolean open, Pane p) {
-
+    private void execution() {
+/*
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -115,8 +112,8 @@ public class Controller  {
         grid.add(field_fichier, 1, 1);
 
         ButtonBar buttonBar = new ButtonBar();
-
         Button addBut = new Button("Confirmer");
+
         ButtonBar.setButtonData(addBut, ButtonBar.ButtonData.OK_DONE);
 
         Button cancelBut = new Button("Annuler");
@@ -137,19 +134,17 @@ public class Controller  {
             windowForm.setTitle("Enregistrer sous...");
         }
         windowForm.setScene(sceneForm);
-
+*/
         // Set position of second window, related to primary window.
         //windowForm.setX(primaryStage.getX() + (primaryStage.getWidth()/2 - sceneForm.getWidth()/2));
         //windowForm.setY(primaryStage.getY() + (primaryStage.getHeight()/2 - sceneForm.getHeight()/2));
-        windowForm.show();
+    //    windowForm.show();
 
-        addBut.setOnAction((ActionEvent e) -> {
-            if(open) {
                 try{
                     bd = new BaseDeTweets();
                     long startTime = System.currentTimeMillis();
                     //ArrayList<Integer> lErr = bd.ouvrir(field_fichier.getText());
-                    bd.ouvrir(field_fichier.getText());
+                    bd.ouvrir(fichier.getText());
                     long endTime = System.currentTimeMillis();
                     Graph<String, DefaultWeightedEdge> g = bd.getDirectedWeightedGraph();
                     int numVertex = 0;
@@ -171,6 +166,7 @@ public class Controller  {
                     }
 
                     System.out.println("Total elapsed time in execution of method callMethod() is :"+ (endTime-startTime)/1000+" secondes");
+                    temps.setAccessibleText(String.valueOf((endTime-startTime)/1000));
                     /*if(lErr.size() != 0){
                         showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Les lignes suivantes sont au mauvais format "+lErr);
                     }
@@ -186,8 +182,14 @@ public class Controller  {
                     ordre.setText(String.valueOf(ordre_var));
                     double diametre_var = bd.getDiametre();
                     diametre.setText(String.valueOf(diametre_var));
-                    Set<CentralUser> page_r = bd.getPageRank(5);
-                    page_rk.setText(String.valueOf(page_r));
+
+
+                   // Set<Map.Entry<String, Double>> page_r = bd.getPageRank(5);
+                    //page_rk.setText(String.valueOf(page_r));
+
+                   // Set<CentralUser> page_r = bd.getPageRank(5);
+                    //page_rk.setText(String.valueOf(page_r));
+
 
                     double meandegree = bd.getMeanDegree();
                     degre_moy.setText(String.valueOf(meandegree));
@@ -195,8 +197,13 @@ public class Controller  {
                     degre_moy_in.setText(String.valueOf(meandegreein));
                     double meandegreeout = bd.getMeanDegreeOut();
                     degre_moy_out.setText(String.valueOf(meandegreeout));
-                    Set<CentralUser> centr = bd.getDegreeCentrality(5);
-                    centralite.setText(String.valueOf(centr));
+
+                   // Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
+                    //centralite.setText(String.valueOf(centr));
+
+                    //Set<CentralUser> centr = bd.getDegreeCentrality(5);
+                    //centralite.setText(String.valueOf(centr));
+
 
 
                     /*
@@ -206,6 +213,7 @@ public class Controller  {
 
                     PageRankUser.setCellValueFactory((TableColumn.CellDataFeatures<Map.Entry<String, String>, String> vl) -> new SimpleStringProperty(vl.getValue().getValue()));
                     this.page_rk_tab.getColumns().setAll(PageRankUser);
+
 
 
                     // Create column UserName (Data type of String).
@@ -218,6 +226,7 @@ public class Controller  {
 
                     page_rk_tab.getColumns().addAll( PageRankUser, PageRankValue);
  */
+                    TreeSet<CentralUser> pageR = bd.getPageRank(5);
 
 
                     /*
@@ -244,47 +253,27 @@ public class Controller  {
                      */
 // Create column UserName (Data type of String).
 
-
-                    TableColumn<CentralUser, String> userNameCol //
-                            = new TableColumn<CentralUser, String>("userName");
+                    TableColumn<CentralUser, String> userName = new TableColumn<CentralUser, String>("userName");
+                    userName.setCellValueFactory(new PropertyValueFactory<>("UserName"));
 
                     // Create column Email (Data type of String).
-                    TableColumn<CentralUser, Double> scorecol//
-                            = new TableColumn<CentralUser, Double>("score");
+                    TableColumn<CentralUser, Double> score = new TableColumn<CentralUser, Double>("score");
+                    score.setCellValueFactory(new PropertyValueFactory<>("score"));
+                    page_rk_tab.getColumns().addAll(userName, score);
+
+                    ObservableList<CentralUser> list = getNewsList();
+                    page_rk_tab.setItems(list);
 
 
-
-                    // Add sub columns to the FullName
-                    page_rk_tab.getColumns().addAll(userNameCol, scorecol);
-
-
-
-                    // Defines how to fill data for each cell.
-                    // Get value from property of UserAccount. .
-                    userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
-                    scorecol.setCellValueFactory(new PropertyValueFactory<>("score"));
+                    // Create column Email (Data type of String).
+                   // TableColumn<CentralUser, Double> scorecol//
+                     //       = new TableColumn<CentralUser, Double>("score");
 
 
-                    // Set Sort type for userName column
-                    userNameCol.setSortType(TableColumn.SortType.DESCENDING);
-                    scorecol.setSortable(false);
 
                     // Display row data
                     //ObservableList<pageRank> list = getUserList();
                     //page_rk_tab.setItems(list);
-
-                    page_rk_tab.getColumns().addAll(userNameCol, scorecol);
-
-
-
-
-
-
-                    Set<CentralUser> pageR = bd.getPageRank(5);
-                   // page_rk_user.setCellValueFactory();
-
-
-
 
 
 
@@ -307,32 +296,30 @@ public class Controller  {
                 catch(IOException ioe) {
                     showAlert(Alert.AlertType.ERROR,"Read error","Problème de lecture du fichier"+ioe);
                 }
-            }
-            windowForm.close();
-        });
-
-        cancelBut.setOnAction((ActionEvent e) -> {
-            windowForm.close();
-        });
-
-    }
-/*
-    private ObservableList<pageRank> getUserList() {
-
-        Set<Map.Entry<String, Double>> users = bd.getPageRank(5);
-
-        for (Map.Entry<String, Double> it: users) {
-            String user = it.getKey();
-            double info = it.getValue();
-            ObservableList<pageRank> list = FXCollections.observableArrayList(user,info);
 
         }
+    private ObservableList<CentralUser> getNewsList(){
+        List<CentralUser> list = new ArrayList<CentralUser> (bd.getPageRank(5));
+        ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
+        return obs_list;
+    }
+/*
+
+    private ObservableValue<CentralUser> getUserList() {
+
+        TreeSet<CentralUser> users = bd.getPageRank(5);
+        for (CentralUser value : users){
+            String user = value.getUserName();
+            double score = value.getScore();
+            ObservableList<? extends Serializable> list = FXCollections.observableArrayList(user, score);
+
+    }
 
         return list;
             }
 
- */
 
+*/
     private Circle createCircle(float poids, String name){
         float radius = 1.0f;
         Circle circle = new Circle();

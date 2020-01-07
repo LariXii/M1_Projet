@@ -9,9 +9,11 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -20,7 +22,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
         <effect>
             <DropShadow />
@@ -35,7 +37,7 @@
                 <menus>
                     <Menu mnemonicParsing="false" text="File">
                         <items>
-                            <MenuItem fx:id="createFormOpenSaveFile" mnemonicParsing="false" onAction="#ouvrir" text="insérer une base de tweets" />
+                            <MenuItem fx:id="createFormOpenSaveFile" mnemonicParsing="false" text="insérer une base de tweets" />
                         </items>
                     </Menu>
                     <Menu mnemonicParsing="false" text="Edit">
@@ -58,7 +60,7 @@
                                 <items>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                         <children>
-                                            <GridPane layoutX="-11.0" layoutY="20.0" prefHeight="136.0" prefWidth="265.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
+                                            <GridPane layoutX="12.0" layoutY="34.0" prefHeight="130.0" prefWidth="263.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="34.0">
                                                 <columnConstraints>
                                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="213.0" minWidth="10.0" prefWidth="110.0" />
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="146.0" />
@@ -70,38 +72,39 @@
                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 </rowConstraints>
                                     <children>
-                                       <Label fx:id="page_rk" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                        <Label text="Densité" />
                                        <Label text="Taille" GridPane.rowIndex="1" />
                                        <Label text="Ordre" GridPane.rowIndex="2" />
                                        <Label text="Diametre" GridPane.rowIndex="3" />
-                                       <Label text="Page Rank" GridPane.rowIndex="4" />
-                                       <Label text="Degré moyen" GridPane.rowIndex="5" />
-                                       <Label text="Degré moyen in" GridPane.rowIndex="6" />
-                                       <Label text="Degré moyen out" GridPane.rowIndex="7" />
-                                       <Label text="Centralité par degré" GridPane.rowIndex="8" />
+                                       <Label text="Degré moyen" GridPane.rowIndex="4" />
+                                       <Label text="Degré moyen in" GridPane.rowIndex="5" />
+                                       <Label text="Degré moyen out" GridPane.rowIndex="6" />
                                        <Label fx:id="densite" GridPane.columnIndex="1" />
                                        <Label fx:id="taille" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                        <Label fx:id="ordre" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                        <Label fx:id="diametre" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                       <Label fx:id="degre_moy" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                       <Label fx:id="degre_moy_in" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                       <Label fx:id="degre_moy_out" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                                       <Label fx:id="centralite" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                       <Label fx:id="degre_moy" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                       <Label fx:id="degre_moy_in" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                       <Label fx:id="degre_moy_out" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                                     </children>
                                             </GridPane>
+                                 <TextField fx:id="fichier" layoutY="4.0" promptText="Choix du fichier" />
+                                 <ButtonBar fx:id="bouton_bar" layoutX="130.0" layoutY="-4.0" prefHeight="40.0" prefWidth="200.0">
+                                   <buttons>
+                                     <Button fx:id="fichier_ok" mnemonicParsing="false" onAction="#ouvrir" prefHeight="11.0" text="OK" />
+                                       <ProgressBar fx:id="temps" prefWidth="200.0" progress="0.0" />
+                                   </buttons>
+                                 </ButtonBar>
                                         </children>
                                     </AnchorPane>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                         <children>
                                             <TableView fx:id="page_rk_tab" layoutX="95.0" layoutY="24.0" prefHeight="164.0" prefWidth="191.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="0.0">
                                                 <columns>
-                                                    <TableColumn fx:id="page_rk_user" prefWidth="72.0" text="Page Rank" />
+                                                    <TableColumn prefWidth="72.0" text="Page Rank" />
                                                     <TableColumn fx:id="page_rk_value" prefWidth="79.0" text="C1" />
                                                 </columns>
                                             </TableView>
