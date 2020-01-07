@@ -10,36 +10,11 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class BaseDeTweets {
-    //private TreeSet<Tweet> baseTweets;
-    //private HashMap<String, User> listUsers;
-    //private HashMap<String, String> listVertex;
     private Graph<String,DefaultWeightedEdge> directedWeightedGraph;
-    //TreeSet servant à récupérer les utilisateurs les plus centraux
-    /*private TreeSet<Map.Entry<String,Double>> usersCentrals = new TreeSet<>((o1, o2) -> {
-        if(o1.getValue() < o2.getValue()){
-            return 1;
-        }
-        else{
-            if(o1.getValue() > o2.getValue()){
-                return -1;
-            }
-            else{
-                return o1.getKey().compareTo(o1.getKey());
-            }
-        }
-    });*/
-
-    public BaseDeTweets() {
-        //this.baseTweets = new TreeSet<>();
-        //this.listUsers = new HashMap<>();
-        //this.listVertex = new HashMap<>();
-    }
 
     public Graph<String,DefaultWeightedEdge> getDirectedWeightedGraph(){
         return directedWeightedGraph;
