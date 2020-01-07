@@ -1,16 +1,21 @@
 package frontEnd;
 
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,7 +26,16 @@ public class OuvertureController {
     private TextField textName;
     @FXML
     private Button buttonOpen;
+    @FXML
+    private ProgressBar progressFileReader;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Label statusLabel;
 
+    /****************************************************
+     *              OUVERTURE DU FICHIER                *
+     ****************************************************/
     public void ouvrir(MouseEvent e) throws IOException{
         Parent loading_page_parent = FXMLLoader.load(getClass().getResource("Loading.fxml"));
         Scene loading_scene = new Scene(loading_page_parent);
@@ -42,5 +56,48 @@ public class OuvertureController {
         catch(FileNotFoundException e){
             return false;
         }
+    }
+
+    private long lengthOfFile(String file){
+        return new File(file).length();
+    }
+
+    /*****************************************************
+     *              CHARGEMENT DU FICHIER                *
+     *****************************************************/
+
+    private boolean startLoading(){
+        progressFileReader.setProgress(0);
+        cancelButton.setDisable(false);
+
+        // Create a Task.
+        copyTask = new CopyTask();
+
+        // Unbind progress property
+        progressFileReader.progressProperty().unbind();
+
+        // Bind progress property
+        progressFileReader.progressProperty().bind(copyTask.progressProperty());
+
+        // Unbind text property for Label.
+        statusLabel.textProperty().unbind();
+
+        // Bind the text property of Label
+        // with message property of Task
+        statusLabel.textProperty().bind(copyTask.messageProperty());
+
+        // When completed tasks
+        copyTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, //
+                new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent t) {
+                        List<File> copied = copyTask.getValue();
+                        statusLabel.textProperty().unbind();
+                        statusLabel.setText("Copied: " + copied.size());
+                    }
+                });
+
+        // Start the Task.
+        new Thread(copyTask).start();
     }
 }
