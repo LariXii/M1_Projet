@@ -49,12 +49,12 @@ public class Tutorial1 {
         catch(IOException ioe){
             System.out.println("Erreur : Open file");
         }
-        org.graphstream.graph.Graph g = JGraphTTOGraphStream(bd.getSubGraph(10));
+        org.graphstream.graph.Graph g = JGraphTTOGraphStream(bd.getSubGraph(50));
         System.out.println("Nombre de noeuds du graph "+g.getNodeCount());
 
         //g.addAttribute("ui.antialias");
         //g.addAttribute("ui.quality");
-        g.addAttribute("ui.stylesheet", "node {size: 4px;size-mode: dyn-size;fill-color: BLUE;text-mode: normal;z-index: 3;}edge {shape: freeplane;fill-color: rgba(39,106,113,50);arrow-size: 1px, 2px; size: 0px;}");
+        g.addAttribute("ui.stylesheet", "node {size: 4px;size-mode: dyn-size;fill-color: BLUE;text-mode: normal;z-index: 3;}edge {shape: line;fill-color: rgba(39,106,113,50);arrow-size: 1px, 0px; size: 0px;}");
 
         Viewer v = g.display(false);
 
