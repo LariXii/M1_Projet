@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -33,6 +34,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.text.DecimalFormat;
@@ -65,8 +67,7 @@ public class Controller  {
     private ProgressBar temps;
     @FXML
     private TableView<CentralUser> page_rk_tab;
-    @FXML
-    private TableColumn<PageRank, String> page_rk_user;
+
     @FXML
     private AnchorPane jgraph;
 
@@ -77,7 +78,12 @@ public class Controller  {
 
 
     }
-    private ObservableList<PageRank> pageRankData = FXCollections.observableArrayList();
+    private ObservableList<CentralUser> userData = FXCollections.observableArrayList();
+
+    public ObservableList<CentralUser> getPersonData() {
+        return userData;
+    }
+
 
 
     //objets graphiques représentant un cercle
@@ -220,6 +226,7 @@ public class Controller  {
 
                     page_rk_tab.getColumns().addAll( PageRankUser, PageRankValue);
  */
+                    TreeSet<CentralUser> pageR = bd.getPageRank(5);
 
 
                     /*
@@ -246,46 +253,27 @@ public class Controller  {
                      */
 // Create column UserName (Data type of String).
 
-
-                    TableColumn<CentralUser, String> userNameCol //
-                            = new TableColumn<CentralUser, String>("userName");
+                    TableColumn<CentralUser, String> userName = new TableColumn<CentralUser, String>("userName");
+                    userName.setCellValueFactory(new PropertyValueFactory<>("UserName"));
 
                     // Create column Email (Data type of String).
-                    TableColumn<CentralUser, Double> scorecol//
-                            = new TableColumn<CentralUser, Double>("score");
+                    TableColumn<CentralUser, Double> score = new TableColumn<CentralUser, Double>("score");
+                    score.setCellValueFactory(new PropertyValueFactory<>("score"));
+                    page_rk_tab.getColumns().addAll(userName, score);
+
+                    ObservableList<CentralUser> list = getNewsList();
+                    page_rk_tab.setItems(list);
+
+
+                    // Create column Email (Data type of String).
+                   // TableColumn<CentralUser, Double> scorecol//
+                     //       = new TableColumn<CentralUser, Double>("score");
 
 
 
-                    // Add sub columns to the FullName
-                    page_rk_tab.getColumns().addAll(userNameCol, scorecol);
-
-
-
-                    // Defines how to fill data for each cell.
-                    // Get value from property of UserAccount. .
-                    userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
-                    scorecol.setCellValueFactory(new PropertyValueFactory<>("score"));
-
-
-                    // Set Sort type for userName column
-                    userNameCol.setSortType(TableColumn.SortType.DESCENDING);
-                    scorecol.setSortable(false);
-                    
                     // Display row data
                     //ObservableList<pageRank> list = getUserList();
                     //page_rk_tab.setItems(list);
-
-
-
-
-
-
-
-                    Set<CentralUser> pageR = bd.getPageRank(5);
-                   // page_rk_user.setCellValueFactory();
-
-
-
 
 
 
@@ -310,25 +298,28 @@ public class Controller  {
                 }
 
         }
-
-
+    private ObservableList<CentralUser> getNewsList(){
+        List<CentralUser> list = new ArrayList<CentralUser> (bd.getPageRank(5));
+        ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
+        return obs_list;
+    }
 /*
-    private ObservableList<pageRank> getUserList() {
 
-        Set<Map.Entry<String, Double>> users = bd.getPageRank(5);
+    private ObservableValue<CentralUser> getUserList() {
 
-        for (Map.Entry<String, Double> it: users) {
-            String user = it.getKey();
-            double info = it.getValue();
-            ObservableList<pageRank> list = FXCollections.observableArrayList(user,info);
+        TreeSet<CentralUser> users = bd.getPageRank(5);
+        for (CentralUser value : users){
+            String user = value.getUserName();
+            double score = value.getScore();
+            ObservableList<? extends Serializable> list = FXCollections.observableArrayList(user, score);
 
-        }
+    }
 
         return list;
             }
 
- */
 
+*/
     private Circle createCircle(float poids, String name){
         float radius = 1.0f;
         Circle circle = new Circle();
