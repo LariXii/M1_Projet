@@ -21,6 +21,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
@@ -102,12 +103,46 @@
                                     </AnchorPane>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                         <children>
-                                            <TableView fx:id="page_rk_tab" layoutX="95.0" layoutY="24.0" prefHeight="164.0" prefWidth="191.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="0.0">
-                                                <columns>
-                                                    <TableColumn prefWidth="72.0" text="Page Rank" />
-                                                    <TableColumn fx:id="page_rk_value" prefWidth="79.0" text="C1" />
-                                                </columns>
-                                            </TableView>
+                                 <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                   <items>
+                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                          <children>
+                                                        <TableView fx:id="page_rk_tab" layoutX="-147.0" layoutY="-162.0" prefHeight="253.0" prefWidth="149.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+                                                            <columns>
+                                                                <TableColumn fx:id="page_rk_user" prefWidth="79.0" text="User" />
+                                                   <TableColumn fx:id="page_rk_score" prefWidth="79.0" text="Score" />
+                                                            </columns>
+                                                <columnResizePolicy>
+                                                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                </columnResizePolicy>
+                                                        </TableView>
+                                             <Label layoutX="54.0" layoutY="6.0" text="PageRank" textFill="#401e1e" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <font>
+                                                   <Font size="18.0" />
+                                                </font>
+                                             </Label>
+                                          </children>
+                                       </AnchorPane>
+                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="200.0">
+                                          <children>
+                                             <TableView fx:id="centr" layoutX="-64.0" layoutY="-111.0" prefHeight="164.0" prefWidth="352.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+                                               <columns>
+                                                 <TableColumn fx:id="centr_user" prefWidth="75.0" text="User" />
+                                                 <TableColumn fx:id="centr_score" prefWidth="75.0" text="Score" />
+                                               </columns>
+                                                <columnResizePolicy>
+                                                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                </columnResizePolicy>
+                                             </TableView>
+                                             <Label layoutX="46.0" layoutY="6.0" text="Centralité" textFill="#542929" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <font>
+                                                   <Font size="18.0" />
+                                                </font>
+                                             </Label>
+                                          </children>
+                                       </AnchorPane>
+                                   </items>
+                                 </SplitPane>
                                         </children>
                                     </AnchorPane>
 
