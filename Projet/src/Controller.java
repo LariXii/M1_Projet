@@ -47,16 +47,22 @@ public class Controller  {
     private Label ordre;
     @FXML
     private Label diametre;
-    @FXML
-    private Label page_rk;
+    //@FXML
+    //private Label page_rk;
     @FXML
     private Label degre_moy;
     @FXML
     private Label degre_moy_in;
     @FXML
     private Label degre_moy_out;
+   // @FXML
+    //private Label centralite;
     @FXML
-    private Label centralite;
+    private TextField fichier;
+    @FXML
+    private Button fichier_ok;
+    @FXML
+    private ProgressBar temps;
     @FXML
     private TableView<pageRank> page_rk_tab;
     @FXML
@@ -67,8 +73,8 @@ public class Controller  {
     @FXML
     private void ouvrir() {
 
-        createFormOpenSaveFile(true,canvas);
-        System.out.print("ic ");
+        execution();
+
 
     }
     private ObservableList<PageRank> pageRankData = FXCollections.observableArrayList();
@@ -84,24 +90,9 @@ public class Controller  {
 
 //definir la troupe des objets graphiques
 
-    Group root;
-    Pane canvas = new Pane();
-    public void start(Stage primaryStage) {
-        construireScene(primaryStage);
-    }
 
-    void construireScene(Stage primaryStage) {
-
-        Scene scene = new Scene(root, 500, 500);
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-
-
-    private void createFormOpenSaveFile(boolean open, Pane p) {
-
+    private void execution() {
+/*
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -115,8 +106,8 @@ public class Controller  {
         grid.add(field_fichier, 1, 1);
 
         ButtonBar buttonBar = new ButtonBar();
-
         Button addBut = new Button("Confirmer");
+
         ButtonBar.setButtonData(addBut, ButtonBar.ButtonData.OK_DONE);
 
         Button cancelBut = new Button("Annuler");
@@ -137,19 +128,17 @@ public class Controller  {
             windowForm.setTitle("Enregistrer sous...");
         }
         windowForm.setScene(sceneForm);
-
+*/
         // Set position of second window, related to primary window.
         //windowForm.setX(primaryStage.getX() + (primaryStage.getWidth()/2 - sceneForm.getWidth()/2));
         //windowForm.setY(primaryStage.getY() + (primaryStage.getHeight()/2 - sceneForm.getHeight()/2));
-        windowForm.show();
+    //    windowForm.show();
 
-        addBut.setOnAction((ActionEvent e) -> {
-            if(open) {
                 try{
                     bd = new BaseDeTweets();
                     long startTime = System.currentTimeMillis();
                     //ArrayList<Integer> lErr = bd.ouvrir(field_fichier.getText());
-                    bd.ouvrir(field_fichier.getText());
+                    bd.ouvrir(fichier.getText());
                     long endTime = System.currentTimeMillis();
                     Graph<String, DefaultWeightedEdge> g = bd.getDirectedWeightedGraph();
                     int numVertex = 0;
@@ -171,6 +160,7 @@ public class Controller  {
                     }
 
                     System.out.println("Total elapsed time in execution of method callMethod() is :"+ (endTime-startTime)/1000+" secondes");
+                    temps.setAccessibleText(String.valueOf((endTime-startTime)/1000));
                     /*if(lErr.size() != 0){
                         showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Les lignes suivantes sont au mauvais format "+lErr);
                     }
@@ -186,8 +176,9 @@ public class Controller  {
                     ordre.setText(String.valueOf(ordre_var));
                     double diametre_var = bd.getDiametre();
                     diametre.setText(String.valueOf(diametre_var));
-                    Set<Map.Entry<String, Double>> page_r = bd.getPageRank(5);
-                    page_rk.setText(String.valueOf(page_r));
+
+                   // Set<Map.Entry<String, Double>> page_r = bd.getPageRank(5);
+                    //page_rk.setText(String.valueOf(page_r));
 
                     double meandegree = bd.getMeanDegree();
                     degre_moy.setText(String.valueOf(meandegree));
@@ -195,8 +186,8 @@ public class Controller  {
                     degre_moy_in.setText(String.valueOf(meandegreein));
                     double meandegreeout = bd.getMeanDegreeOut();
                     degre_moy_out.setText(String.valueOf(meandegreeout));
-                    Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
-                    centralite.setText(String.valueOf(centr));
+                   // Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
+                    //centralite.setText(String.valueOf(centr));
 
 
                     /*
@@ -206,6 +197,7 @@ public class Controller  {
 
                     PageRankUser.setCellValueFactory((TableColumn.CellDataFeatures<Map.Entry<String, String>, String> vl) -> new SimpleStringProperty(vl.getValue().getValue()));
                     this.page_rk_tab.getColumns().setAll(PageRankUser);
+
 
 
                     // Create column UserName (Data type of String).
@@ -245,35 +237,10 @@ public class Controller  {
 // Create column UserName (Data type of String).
 
 
-                    TableColumn<pageRank, String> userNameCol //
-                            = new TableColumn<pageRank, String>("User Name");
-
-                    // Create column Email (Data type of String).
-                    TableColumn<pageRank, Double> scorecol//
-                            = new TableColumn<pageRank, Double>("score");
-
-
-
-                    // Add sub columns to the FullName
-                    page_rk_tab.getColumns().addAll(userNameCol, scorecol);
-
-
-
-                    // Defines how to fill data for each cell.
-                    // Get value from property of UserAccount. .
-                    userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
-                    scorecol.setCellValueFactory(new PropertyValueFactory<>("score"));
-
-
-                    // Set Sort type for userName column
-                    userNameCol.setSortType(TableColumn.SortType.DESCENDING);
-                    scorecol.setSortable(false);
-
                     // Display row data
                     //ObservableList<pageRank> list = getUserList();
                     //page_rk_tab.setItems(list);
 
-                    page_rk_tab.getColumns().addAll(userNameCol, scorecol);
 
 
 
@@ -318,15 +285,10 @@ public class Controller  {
                 catch(IOException ioe) {
                     showAlert(Alert.AlertType.ERROR,"Read error","Problème de lecture du fichier"+ioe);
                 }
-            }
-            windowForm.close();
-        });
 
-        cancelBut.setOnAction((ActionEvent e) -> {
-            windowForm.close();
-        });
+        }
 
-    }
+
 /*
     private ObservableList<pageRank> getUserList() {
 
