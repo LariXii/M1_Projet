@@ -48,7 +48,7 @@ public class BaseDeTweets {
     public Graph<String,DefaultWeightedEdge> getSubGraph(int n){
         Set<String> vertices = directedWeightedGraph
                 .vertexSet().stream().filter(el -> directedWeightedGraph.degreeOf(el) > n).collect(Collectors.toSet());
-        System.out.println(vertices.size());
+        /***/System.out.println(vertices.size());
         Graph<String,DefaultWeightedEdge> subgraph = new AsSubgraph<>(directedWeightedGraph,vertices);
         return subgraph;
     }
