@@ -1,5 +1,4 @@
-//import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
-import org.graphstream.algorithm.Toolkit;
+package backEnd;//import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -210,7 +209,7 @@ public class BaseDeTweets {
         //List des erreurs du fichier lu
         ArrayList<Integer> tErr = new ArrayList<>();
         //Création de la base de tweet
-        new BaseDeTweets();
+        new backEnd.BaseDeTweets();
         while ((chaine = csv.readLine()) != null) {
             String[] tabChaine = chaine.split("\t");
             //Variable utile afin de connaitre le numéro de la ligne erronée
@@ -232,16 +231,16 @@ public class BaseDeTweets {
                 if (tabChaine.length == 5) {
                     reTweet = tabChaine[4];
                 }
-                //Création d'un objet Tweet
-                Tweet t = new Tweet(1, idUser, date, texte, reTweet);
+                //Création d'un objet backEnd.Tweet
+                backEnd.Tweet t = new backEnd.Tweet(1, idUser, date, texte, reTweet);
                 //Ajout dans la base de tweet
                 baseTweets.add(t);
                 // Ajout de l'utilisateur dans la liste des utilisateurs et enregistrement du retweet de l'utilisateur
-                User user = new User(idUser);
+                backEnd.User user = new backEnd.User(idUser);
                 listUsers.putIfAbsent(idUser, user);
 
                 if(reTweet != null){
-                    User userReTweet = new User(reTweet);
+                    backEnd.User userReTweet = new backEnd.User(reTweet);
                     listUsers.putIfAbsent(reTweet, userReTweet);
                     userReTweet = listUsers.get(reTweet);
                     userReTweet.setEstReTweet(userReTweet.getEstReTweet() + 1);
@@ -249,9 +248,9 @@ public class BaseDeTweets {
 
                 user = listUsers.get(idUser);
                 if (reTweet != null) {
-                    HashMap<String, ArrayList<Tweet>> listReTweet = user.getListReTweet();
+                    HashMap<String, ArrayList<backEnd.Tweet>> listReTweet = user.getListReTweet();
                     if (listReTweet.get(reTweet) == null) {
-                        ArrayList<Tweet> arr = new ArrayList<>();
+                        ArrayList<backEnd.Tweet> arr = new ArrayList<>();
                         arr.add(t);
                         listReTweet.put(reTweet, arr);
                     } else {

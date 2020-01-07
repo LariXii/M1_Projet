@@ -1,16 +1,10 @@
+package backEnd;
+
 import java.io.IOException;
-import java.io.StringReader;
 
 import org.graphstream.algorithm.Toolkit;
-import org.graphstream.algorithm.coloring.WelshPowell;
-import org.graphstream.algorithm.community.EpidemicCommunityAlgorithm;
-import org.graphstream.algorithm.community.Leung;
 import org.graphstream.graph.ElementNotFoundException;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.stream.GraphParseException;
-import org.graphstream.stream.file.FileSourceDGS;
 
 public class HelloJGraphT {
 

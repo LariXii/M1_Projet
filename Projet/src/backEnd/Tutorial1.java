@@ -1,16 +1,10 @@
-import org.graphstream.algorithm.generator.Generator;
-import org.graphstream.algorithm.generator.GridGenerator;
-import org.graphstream.algorithm.generator.RandomGenerator;
-import org.graphstream.graph.*;
+package backEnd;
+
 import org.graphstream.graph.implementations.*;
-import org.graphstream.ui.layout.Layout;
-import org.graphstream.ui.layout.springbox.BarnesHutLayout;
 import org.graphstream.ui.layout.springbox.implementations.LinLog;
 import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 import org.graphstream.ui.view.Viewer;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-import org.jgrapht.Graph;
 
 import java.io.IOException;
 import java.util.Random;

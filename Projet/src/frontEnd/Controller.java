@@ -1,42 +1,25 @@
-import javafx.application.Application;
+package frontEnd;
+
+import backEnd.BaseDeTweets;
+import backEnd.CentralUser;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTreeTableCell;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-import javafx.util.Callback;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.view.Viewer;
 import org.jgrapht.Graph;
-import org.jgrapht.alg.scoring.PageRank;
-import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+
 import java.io.IOException;
-import java.io.Serializable;
-import java.sql.ResultSet;
-import java.time.LocalDate;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -79,13 +62,15 @@ public class Controller  {
     private TableColumn<CentralUser, Double> centr_score;
     @FXML
     private AnchorPane jgraph;
+    @FXML
+    private Pane pane_graph;
+    @FXML
+    private AreaChart graph;
 
     @FXML
     private void ouvrir() {
-
-        execution();
-
-
+        //execution();
+        pane_graph.setVisible(!pane_graph.isVisible());
     }
     private ObservableList<CentralUser> userData = FXCollections.observableArrayList();
 
@@ -93,7 +78,9 @@ public class Controller  {
         return userData;
     }
 
-
+    public void afficher(){
+        System.out.println("Test");
+    }
 
     //objets graphiques représentant un cercle
 
@@ -196,7 +183,7 @@ public class Controller  {
                    // Set<Map.Entry<String, Double>> page_r = bd.getPageRank(5);
                     //page_rk.setText(String.valueOf(page_r));
 
-                   // Set<CentralUser> page_r = bd.getPageRank(5);
+                   // Set<backEnd.CentralUser> page_r = bd.getPageRank(5);
                     //page_rk.setText(String.valueOf(page_r));
 
 
@@ -210,7 +197,7 @@ public class Controller  {
                    // Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
                     //centralite.setText(String.valueOf(centr));
 
-                    //Set<CentralUser> centr = bd.getDegreeCentrality(5);
+                    //Set<backEnd.CentralUser> centr = bd.getDegreeCentrality(5);
                     //centralite.setText(String.valueOf(centr));
 
 
@@ -226,8 +213,8 @@ public class Controller  {
 
 
                     // Create column UserName (Data type of String).
-                    TableColumn<String, String> PageRankUser = new TableColumn<String, Double>("User");
-                    PageRankUser.setCellValueFactory(new PropertyValueFactory<>("User"));
+                    TableColumn<String, String> PageRankUser = new TableColumn<String, Double>("backEnd.User");
+                    PageRankUser.setCellValueFactory(new PropertyValueFactory<>("backEnd.User"));
 
                     // Create column Email (Data type of String).
                     TableColumn<PageRank, Double> PageRankValue = new TableColumn<PageRank, Double>("value");
@@ -239,21 +226,21 @@ public class Controller  {
 
 
                     /*
-                    TableColumn<Tweet, Long> idTweetCol = new TableColumn<Tweet, Long>("ID");
+                    TableColumn<backEnd.Tweet, Long> idTweetCol = new TableColumn<backEnd.Tweet, Long>("ID");
                     idTweetCol.setCellValueFactory(new PropertyValueFactory<>("idTweet"));
 
                     // Create column Email (Data type of String).
-                    TableColumn<Tweet, String> userTweetCol = new TableColumn<Tweet, String>("User");
+                    TableColumn<backEnd.Tweet, String> userTweetCol = new TableColumn<backEnd.Tweet, String>("backEnd.User");
                     userTweetCol.setCellValueFactory(new PropertyValueFactory<>("idUser"));
 
                     // Create column FullName (Data type of String).
-                    TableColumn<Tweet, LocalDate> dateTweetCol = new TableColumn<Tweet, LocalDate>("Date");
+                    TableColumn<backEnd.Tweet, LocalDate> dateTweetCol = new TableColumn<backEnd.Tweet, LocalDate>("Date");
                     dateTweetCol.setCellValueFactory(new PropertyValueFactory<>("dateTweet"));
                     // Active Column
-                    TableColumn<Tweet, String> textTweetCol = new TableColumn<Tweet, String>("Texte");
+                    TableColumn<backEnd.Tweet, String> textTweetCol = new TableColumn<backEnd.Tweet, String>("Texte");
                     textTweetCol.setCellValueFactory(new PropertyValueFactory<>("textTweet"));
 
-                    TableColumn<Tweet, String> idReTweetCol = new TableColumn<Tweet, String>("ReTweet");
+                    TableColumn<backEnd.Tweet, String> idReTweetCol = new TableColumn<backEnd.Tweet, String>("ReTweet");
                     idReTweetCol.setCellValueFactory(new PropertyValueFactory<>("idReTweet"));
 
                     page_rk_tab.getColumns().addAll(idTweetCol, userTweetCol, dateTweetCol, textTweetCol, idReTweetCol);
@@ -262,11 +249,11 @@ public class Controller  {
                      */
 // Create column UserName (Data type of String).
 
-                   // TableColumn<CentralUser, String> userName = new TableColumn<CentralUser, String>("userName");
+                   // TableColumn<backEnd.CentralUser, String> userName = new TableColumn<backEnd.CentralUser, String>("userName");
                     page_rk_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
 
                     // Create column Email (Data type of String).
-                  //  TableColumn<CentralUser, Double> score = new TableColumn<CentralUser, Double>("score");
+                  //  TableColumn<backEnd.CentralUser, Double> score = new TableColumn<backEnd.CentralUser, Double>("score");
                     page_rk_score.setCellValueFactory(new PropertyValueFactory<>("score"));
                     //page_rk_tab.getColumns().addAll(userName, score);
 
@@ -277,7 +264,7 @@ public class Controller  {
                     centr_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
 
                     // Create column Email (Data type of String).
-                    //  TableColumn<CentralUser, Double> score = new TableColumn<CentralUser, Double>("score");
+                    //  TableColumn<backEnd.CentralUser, Double> score = new TableColumn<backEnd.CentralUser, Double>("score");
                     centr_score.setCellValueFactory(new PropertyValueFactory<>("score"));
                     //page_rk_tab.getColumns().addAll(userName, score);
 
@@ -285,8 +272,8 @@ public class Controller  {
                     centr.setItems(listCentr);
 
                     // Create column Email (Data type of String).
-                   // TableColumn<CentralUser, Double> scorecol//
-                     //       = new TableColumn<CentralUser, Double>("score");
+                   // TableColumn<backEnd.CentralUser, Double> scorecol//
+                     //       = new TableColumn<backEnd.CentralUser, Double>("score");
 
 
 
@@ -329,10 +316,10 @@ public class Controller  {
     }
 /*
 
-    private ObservableValue<CentralUser> getUserList() {
+    private ObservableValue<backEnd.CentralUser> getUserList() {
 
-        TreeSet<CentralUser> users = bd.getPageRank(5);
-        for (CentralUser value : users){
+        TreeSet<backEnd.CentralUser> users = bd.getPageRank(5);
+        for (backEnd.CentralUser value : users){
             String user = value.getUserName();
             double score = value.getScore();
             ObservableList<? extends Serializable> list = FXCollections.observableArrayList(user, score);

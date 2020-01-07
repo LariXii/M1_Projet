@@ -1,3 +1,5 @@
+package backEnd;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -63,7 +65,7 @@ public class Tweet implements Comparable<Tweet>, Serializable {
 /**********************************************************************************/
     @Override
     public String toString() {
-        return "Tweet{" +
+        return "backEnd.Tweet{" +
                 "idTweet=" + idTweet +
                 ", idUser='" + idUser + '\'' +
                 ", dateTweet=" + dateTweet +

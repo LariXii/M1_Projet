@@ -1,3 +1,7 @@
+package frontEnd;
+
+import backEnd.BaseDeTweets;
+import backEnd.Tweet;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -12,20 +16,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.MenuBar;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -350,7 +346,7 @@ public class InterfaceTweet extends Application {
         idTweetCol.setCellValueFactory(new PropertyValueFactory<>("idTweet"));
 
         // Create column Email (Data type of String).
-        TableColumn<Tweet, String> userTweetCol = new TableColumn<Tweet, String>("User");
+        TableColumn<Tweet, String> userTweetCol = new TableColumn<Tweet, String>("backEnd.User");
         userTweetCol.setCellValueFactory(new PropertyValueFactory<>("idUser"));
 
         // Create column FullName (Data type of String).

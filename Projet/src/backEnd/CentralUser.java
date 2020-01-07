@@ -1,3 +1,5 @@
+package backEnd;
+
 public class CentralUser implements Comparable<CentralUser> {
     private String userName;
     private double score;
