@@ -52,7 +52,7 @@ public class JGraphXAdapterDemo extends JApplet
         }
         // create a JGraphT graph
         ListenableGraph<String, DefaultWeightedEdge> g =
-                new DefaultListenableGraph<>(bd.getSubGraph());
+                new DefaultListenableGraph<>(bd.getSubGraph(100));
 
         // create a visualization using JGraph, via an adapter
         jgxAdapter = new JGraphXAdapter<>(g);

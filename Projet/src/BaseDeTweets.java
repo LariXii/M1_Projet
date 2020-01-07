@@ -21,7 +21,7 @@ public class BaseDeTweets {
     //private HashMap<String, String> listVertex;
     private Graph<String,DefaultWeightedEdge> directedWeightedGraph;
     //TreeSet servant à récupérer les utilisateurs les plus centraux
-    private TreeSet<Map.Entry<String,Double>> usersCentrals = new TreeSet<>((o1, o2) -> {
+    /*private TreeSet<Map.Entry<String,Double>> usersCentrals = new TreeSet<>((o1, o2) -> {
         if(o1.getValue() < o2.getValue()){
             return 1;
         }
@@ -33,7 +33,7 @@ public class BaseDeTweets {
                 return o1.getKey().compareTo(o1.getKey());
             }
         }
-    });
+    });*/
 
     public BaseDeTweets() {
         //this.baseTweets = new TreeSet<>();
@@ -45,43 +45,40 @@ public class BaseDeTweets {
         return directedWeightedGraph;
     }
 
-    public AsSubgraph<String,DefaultWeightedEdge> getSubGraph(int n){
+    public Graph<String,DefaultWeightedEdge> getSubGraph(int n){
         Set<String> vertices = directedWeightedGraph
                 .vertexSet().stream().filter(el -> directedWeightedGraph.degreeOf(el) > n).collect(Collectors.toSet());
         System.out.println(vertices.size());
-        AsSubgraph<String,DefaultWeightedEdge> subgraph = new AsSubgraph<>(directedWeightedGraph,vertices);
+        Graph<String,DefaultWeightedEdge> subgraph = new AsSubgraph<>(directedWeightedGraph,vertices);
         return subgraph;
     }
     /*****************************************************
      *          UTILISATEURS LES PLUS CENTRAUX           *
      *****************************************************/
 
-    public Set<Map.Entry<String,Double>> getDegreeCentrality(int n){
-        usersCentrals.clear();
+    public TreeSet<CentralUser> getDegreeCentrality(int n){
+        TreeSet<CentralUser> usersCentrals = new TreeSet<>();
         //Le nombre moyen d'arêtes qui partent et débutent à partir d'un noeud.
         for(String s : directedWeightedGraph.vertexSet()){
-            double total = 0;
-            for(DefaultWeightedEdge dwe :directedWeightedGraph.incomingEdgesOf(s)){
-                total += directedWeightedGraph.getEdgeWeight(dwe);
-            }
-            for(DefaultWeightedEdge dwe :directedWeightedGraph.outgoingEdgesOf(s)){
-                total += directedWeightedGraph.getEdgeWeight(dwe);
-            }
-            AbstractMap.SimpleEntry<String,Double> entry = new AbstractMap.SimpleEntry<String,Double>(s,total);
-            usersCentrals.add(entry);
+            double poids = directedWeightedGraph.degreeOf(s);
+            CentralUser user = new CentralUser(s,poids);
+            usersCentrals.add(user);
             if(usersCentrals.size() > n){
                 usersCentrals.pollLast();
             }
         }
         return usersCentrals;
     }
-    public Set<Map.Entry<String,Double>> getPageRank(int n){
-        usersCentrals.clear();
+    public TreeSet<CentralUser> getPageRank(int n){
+        TreeSet<CentralUser> usersCentrals = new TreeSet<>();
         PageRank<String,DefaultWeightedEdge> pg = new PageRank<>(this.directedWeightedGraph);
         Map<String,Double> scores = pg.getScores();
 
         for(Map.Entry me : scores.entrySet()){
-            usersCentrals.add(me);
+            String name = (String)me.getKey();
+            double score = (Double)me.getValue();
+            CentralUser user = new CentralUser(name,score);
+            usersCentrals.add(user);
             //On supprime la plus petite valeur du TreeSet
             if(usersCentrals.size() > n){
                 usersCentrals.pollLast();
