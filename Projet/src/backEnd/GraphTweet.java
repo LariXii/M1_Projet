@@ -143,11 +143,6 @@ public class GraphTweet{
         return t / (n * (n - 1));
     }
 
-    /*public Task<Void> ouvrir(String file,long size){
-
-        //return new readingTask(file,size);
-    }*/
-
     public static void reportPerformanceFor(String msg, long refTime) {
         double time = (System.currentTimeMillis() - refTime) / 1000.0;
         double mem = usedMemory() / (1024.0 * 1024.0);
