@@ -1,5 +1,7 @@
 package frontEnd;
 
+import backEnd.GraphTweet;
+import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +16,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,6 +29,7 @@ public class OuvertureController {
     private TextField textName;
     @FXML
     private Button buttonOpen;
+
     @FXML
     private ProgressBar progressFileReader;
     @FXML
@@ -33,17 +37,31 @@ public class OuvertureController {
     @FXML
     private Label statusLabel;
 
+    private GraphTweet graph;
+
     /****************************************************
      *              OUVERTURE DU FICHIER                *
      ****************************************************/
-    public void ouvrir(MouseEvent e) throws IOException{
-        Parent loading_page_parent = FXMLLoader.load(getClass().getResource("Loading.fxml"));
+    @FXML
+    private void ouvrir(MouseEvent e) throws IOException{
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("Loading.fxml"));
+        Parent loading_page_parent = loader.load();
+
         Scene loading_scene = new Scene(loading_page_parent);
         Stage window_parent = (Stage)((Node) e.getSource()).getScene().getWindow();
-        System.out.println(isFolderNameValid());
         if(isFolderNameValid()){
             window_parent.hide();
             window_parent.setScene(loading_scene);
+            window_parent.setOnShown(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    OuvertureController ctrler = loader.getController();
+                    ctrler.startLoading();
+                }
+            });
+            System.out.println("Show");
             window_parent.show();
         }
     }
@@ -62,17 +80,16 @@ public class OuvertureController {
         return new File(file).length();
     }
 
-    /*****************************************************
-     *              CHARGEMENT DU FICHIER                *
-     *****************************************************/
-
-    private boolean startLoading(){
+    private void startLoading(){
+        System.out.println(progressFileReader);
+        System.out.println(cancelButton);
         progressFileReader.setProgress(0);
         cancelButton.setDisable(false);
 
         // Create a Task.
-        copyTask = new CopyTask();
+        GraphTweet graph = new GraphTweet();
 
+        Task<Void> copyTask= graph.ouvrir("foot.txt");
         // Unbind progress property
         progressFileReader.progressProperty().unbind();
 
@@ -91,13 +108,18 @@ public class OuvertureController {
                 new EventHandler<WorkerStateEvent>() {
                     @Override
                     public void handle(WorkerStateEvent t) {
-                        List<File> copied = copyTask.getValue();
                         statusLabel.textProperty().unbind();
-                        statusLabel.setText("Copied: " + copied.size());
+                        System.out.println("Données chargées");
                     }
                 });
 
         // Start the Task.
         new Thread(copyTask).start();
+    }
+
+    @FXML
+    private void onCancelButton(ActionEvent e){
+        System.out.println(progressFileReader);
+        System.out.println(cancelButton);
     }
 }

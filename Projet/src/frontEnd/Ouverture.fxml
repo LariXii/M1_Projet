@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontEnd.OuvertureController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/1.8.0_191" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontEnd.OuvertureController">
    <children>
       <Label layoutX="56.0" layoutY="42.0" prefHeight="17.0" prefWidth="190.0" text="Saississez le nom du fichier à ouvrir" />
       <TextField fx:id="textName" blendMode="SRC_ATOP" layoutX="76.0" layoutY="88.0" />

@@ -1,6 +1,6 @@
 package frontEnd;
 
-import backEnd.BaseDeTweets;
+import backEnd.GraphTweet;
 import backEnd.CentralUser;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -86,7 +86,7 @@ public class Controller  {
 
     public  Rectangle rectangle;
     private BooleanProperty isNotCreate = new SimpleBooleanProperty(true);
-    private static BaseDeTweets bd;
+    private static GraphTweet bd;
 
 
 
@@ -136,37 +136,15 @@ public class Controller  {
         //windowForm.setY(primaryStage.getY() + (primaryStage.getHeight()/2 - sceneForm.getHeight()/2));
     //    windowForm.show();
 
-                try{
-                    bd = new BaseDeTweets();
+                //try{
+                    bd = new GraphTweet();
                     long startTime = System.currentTimeMillis();
-                    //ArrayList<Integer> lErr = bd.ouvrir(field_fichier.getText());
                     bd.ouvrir(fichier.getText());
                     long endTime = System.currentTimeMillis();
                     Graph<String, DefaultWeightedEdge> g = bd.getDirectedWeightedGraph();
-                    int numVertex = 0;
-                    int i =1;
-                    for(String s : g.vertexSet()){
-                        float total = 0;
-                        for(DefaultWeightedEdge dwe :g.incomingEdgesOf(s)){
-                            total += g.getEdgeWeight(dwe);
-                        }
-                        Circle circle = createCircle(total,s);
-                        double x = 0 + i * circle.getRadius();
-                        double y = 50;
-                        circle.relocate(x,y);
-                        numVertex++;
-                        if(total > 3000 && i < 50){
-                            jgraph.getChildren().add(circle);
-                            i++;
-                        }
-                    }
 
                     System.out.println("Total elapsed time in execution of method callMethod() is :"+ (endTime-startTime)/1000+" secondes");
                     temps.setAccessibleText(String.valueOf((endTime-startTime)/1000));
-                    /*if(lErr.size() != 0){
-                        showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Les lignes suivantes sont au mauvais format "+lErr);
-                    }
-                    updateDataTableView(table);*/
 
                     DecimalFormat df = new DecimalFormat("0.00000000");
                     double dens = bd.getDensite();
@@ -193,12 +171,6 @@ public class Controller  {
                     degre_moy_in.setText(String.valueOf(meandegreein));
                     double meandegreeout = bd.getMeanDegreeOut();
                     degre_moy_out.setText(String.valueOf(meandegreeout));
-
-                   // Set<Map.Entry<String, Double>> centr = bd.getDegreeCentrality(5);
-                    //centralite.setText(String.valueOf(centr));
-
-                    //Set<backEnd.CentralUser> centr = bd.getDegreeCentrality(5);
-                    //centralite.setText(String.valueOf(centr));
 
 
 
@@ -287,21 +259,11 @@ public class Controller  {
                    // System.out.println("Taille : "+bd.getTaille());
                     //System.out.println("Ordre : "+bd.getOrdre());
                     long time = System.currentTimeMillis();
-                  /*  System.out.println("A partir de la base du graph :");
-                    System.out.println("Densité : "+bd.getDensite());
-                    System.out.println("Taille : "+bd.getTaille());
-                    System.out.println("Ordre : "+bd.getOrdre());
-                    System.out.println("Diamètre : "+bd.getDiametre());
-                    System.out.println("Page Rank : "+bd.getPageRank(5));
-                    System.out.println("Degre Moyen : "+bd.getMeanDegree());
-                    System.out.println("Degre Moyen In : "+bd.getMeanDegreeIn());
-                    System.out.println("Degre Moyen Out : "+bd.getMeanDegreeOut());
-                    System.out.println("Centralité par degré : "+bd.getDegreeCentrality(5));*/
-                    BaseDeTweets.reportPerformanceFor("After affichage",time);
-                }
+                    GraphTweet.reportPerformanceFor("After affichage",time);
+                /*}
                 catch(IOException ioe) {
                     showAlert(Alert.AlertType.ERROR,"Read error","Problème de lecture du fichier"+ioe);
-                }
+                }*/
 
         }
     private ObservableList<CentralUser> getNewsListPR(){
@@ -331,18 +293,6 @@ public class Controller  {
 
 
 */
-    private Circle createCircle(float poids, String name){
-        float radius = 1.0f;
-        Circle circle = new Circle();
-        if(poids > 0){
-            radius *= Math.sqrt(poids)/3;
-        }
-        circle.setRadius(radius);
-        circle.setFill(Color.BLUE);
-        circle.setAccessibleText(name);
-        return circle;
-    }
-
     private static void JGraphTTOGraphStream(org.jgrapht.Graph<String, org.jgrapht.graph.DefaultWeightedEdge> dwGraph, double maxWeight){
         org.graphstream.graph.Graph g = new SingleGraph("Foot");
         g.setStrict(true);

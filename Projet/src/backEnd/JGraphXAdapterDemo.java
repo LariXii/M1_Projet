@@ -45,13 +45,13 @@ public class JGraphXAdapterDemo extends JApplet
     @Override
     public void init()
     {
-        BaseDeTweets bd = new BaseDeTweets();
-        try {
+        GraphTweet bd = new GraphTweet();
+        /*try {
             bd.ouvrir("foot.txt");
         }
         catch(IOException e){
             System.out.println("Problèem de lecture du fichier");
-        }
+        }*/
         // create a JGraphT graph
         ListenableGraph<String, DefaultWeightedEdge> g =
                 new DefaultListenableGraph<>(bd.getSubGraph(100));

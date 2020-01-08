@@ -11,13 +11,13 @@ public class HelloJGraphT {
     public static void main(String[] args) throws IOException,
             ElementNotFoundException, GraphParseException {
 
-        BaseDeTweets bd = new BaseDeTweets();
-        try{
+        GraphTweet bd = new GraphTweet();
+        /*try{
             bd.ouvrir("foot.txt");
         }
         catch(IOException ioe){
             System.out.println("Erreur : Open file");
-        }
+        }*/
         org.graphstream.graph.Graph graph = Tutorial1.JGraphTTOGraphStream(bd.getDirectedWeightedGraph());
 
         System.out.println(Toolkit.averageDegree(graph));

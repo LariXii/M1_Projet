@@ -36,13 +36,13 @@ public class Tutorial1 {
         g.addAttribute("ui.quality");
         g.addAttribute("ui.stylesheet", "node { fill-color: red; }");
         g.display();*/
-        BaseDeTweets bd = new BaseDeTweets();
-        try{
+        GraphTweet bd = new GraphTweet();
+        /*try{
             bd.ouvrir("foot.txt");
         }
         catch(IOException ioe){
             System.out.println("Erreur : Open file");
-        }
+        }*/
         org.graphstream.graph.Graph g = JGraphTTOGraphStream(bd.getSubGraph(50));
         System.out.println("Nombre de noeuds du graph "+g.getNodeCount());
 

@@ -1,6 +1,6 @@
 package frontEnd;
 
-import backEnd.BaseDeTweets;
+import backEnd.GraphTweet;
 import backEnd.Tweet;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -45,7 +45,7 @@ public class InterfaceTweet extends Application {
 
     public  Rectangle rectangle;
     private BooleanProperty isNotCreate = new SimpleBooleanProperty(true);
-    private static BaseDeTweets bd;
+    private static GraphTweet bd;
 
 //definir la troupe des objets graphiques
 
@@ -77,7 +77,7 @@ public class InterfaceTweet extends Application {
         newItem.setOnAction((ActionEvent e) -> {
             if(isNotCreate.getValue()) {
                 isNotCreate.set(false);
-                bd = new BaseDeTweets();
+                bd = new GraphTweet();
             }
             else {
 
@@ -200,8 +200,8 @@ public class InterfaceTweet extends Application {
 
         addBut.setOnAction((ActionEvent e) -> {
             if(open) {
-                try{
-                    bd = new BaseDeTweets();
+                /*try{
+                    bd = new GraphTweet();
                     long startTime = System.currentTimeMillis();
                     //ArrayList<Integer> lErr = bd.ouvrir(field_fichier.getText());
                     bd.ouvrir(field_fichier.getText());
@@ -226,17 +226,18 @@ public class InterfaceTweet extends Application {
                     }
 
                     System.out.println("Total elapsed time in execution of method callMethod() is :"+ (endTime-startTime)/1000+" secondes");
-                    /*if(lErr.size() != 0){
-                        showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Les lignes suivantes sont au mauvais format "+lErr);
-                    }
-                    updateDataTableView(table);*/
+                    //if(lErr.size() != 0){
+                    //    showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Les lignes suivantes sont au mauvais format "+lErr);
+                    //}
+                    //updateDataTableView(table);
 
-                    /*DecimalFormat df = new DecimalFormat("0.00000000"); // import java.text.DecimalFormat;
+                    //DecimalFormat df = new DecimalFormat("0.00000000"); // import java.text.DecimalFormat;
 
-                    System.out.println("A partir de la base de tweet :");
-                    System.out.println("Densité : "+df.format(bd.getDensite()));
-                    System.out.println("Taille : "+bd.getTaille());
-                    System.out.println("Ordre : "+bd.getOrdre());*/
+                    //System.out.println("A partir de la base de tweet :");
+                    //System.out.println("Densité : "+df.format(bd.getDensite()));
+                    //System.out.println("Taille : "+bd.getTaille());
+                    //System.out.println("Ordre : "+bd.getOrdre());
+
                     long time = System.currentTimeMillis();
                     System.out.println("A partir de la base du graph :");
                     System.out.println("Densité : "+bd.getDensite());
@@ -248,11 +249,11 @@ public class InterfaceTweet extends Application {
                     System.out.println("Degre Moyen In : "+bd.getMeanDegreeIn());
                     System.out.println("Degre Moyen Out : "+bd.getMeanDegreeOut());
                     System.out.println("Centralité par degré : "+bd.getDegreeCentrality(5));
-                    BaseDeTweets.reportPerformanceFor("After affichage",time);
+                    GraphTweet.reportPerformanceFor("After affichage",time);
                 }
                 catch(IOException ioe) {
                     showAlert(Alert.AlertType.ERROR,primaryStage,"Read error","Problème de lecture du fichier"+ioe);
-                }
+                }*/
             }
             windowForm.close();
         });
