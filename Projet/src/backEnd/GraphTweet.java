@@ -16,12 +16,59 @@ import java.util.stream.Collectors;
 public class GraphTweet{
     private Graph<String,DefaultWeightedEdge> directedWeightedGraph;
 
+    private double densite;
+    private double degreMax;
+    private double degreMoyen;
+    private double degreEntrantMoyen;
+    private double degreSortantMoyen;
+    private double diametre;
+    private int ordre;
+    private int volume;
+    /***************************************
+     *          GETTER ET SETTER           *
+     ****************************************/
+
+    public double getDensite() {
+        return densite;
+    }
+
+    public double getDegreMax() {
+        return degreMax;
+    }
+
+    public double getDegreMoyen() {
+        return degreMoyen;
+    }
+
+    public double getDegreEntrantMoyen() {
+        return degreEntrantMoyen;
+    }
+
+    public double getDegreSortantMoyen() {
+        return degreSortantMoyen;
+    }
+
+    public double getDiametre() {
+        return diametre;
+    }
+
+    public int getOrdre() {
+        return ordre;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
     public GraphTweet(){
         directedWeightedGraph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
     }
 
     public Graph<String,DefaultWeightedEdge> getDirectedWeightedGraph(){
         return directedWeightedGraph;
+    }
+    public void setDirectedWeightedGraph(Graph g){
+        directedWeightedGraph = g;
     }
 
     public Graph<String,DefaultWeightedEdge> getSubGraph(int n){
@@ -31,6 +78,8 @@ public class GraphTweet{
         Graph<String,DefaultWeightedEdge> subgraph = new AsSubgraph<>(directedWeightedGraph,vertices);
         return subgraph;
     }
+
+
     /*****************************************************
      *          UTILISATEURS LES PLUS CENTRAUX           *
      *****************************************************/
@@ -66,19 +115,19 @@ public class GraphTweet{
         return usersCentrals;
     }
 
-    /************************************************
-     *          STATISTIQUE SUR LE GRAPHE           *
-     ************************************************/
+    /*********************************************************************
+     *          FONCTIONS DE CALCULS DES STATISTIQUE DU GRAPHE           *
+     *********************************************************************/
 
-    public double getMaxDegree(Graph<String, DefaultWeightedEdge> g){
+    public void calculMaxDegree(Graph<String, DefaultWeightedEdge> g){
         double max = 0.0;
         for(String s : g.vertexSet()){
             if(max < g.degreeOf(s))
                 max = g.degreeOf(s);
         }
-        return max;
+        degreMax = max;
     }
-    public double getDiametre(){
+    public void calculDiametre(){
         long time = System.currentTimeMillis();
         double diametre = Double.NEGATIVE_INFINITY;
         int i = 1;
@@ -100,47 +149,47 @@ public class GraphTweet{
             }
             reportPerformanceFor("graph diametre", time);
         }
-        return diametre;
+        this.diametre = diametre;
     }
     public boolean isConnected(){
         ConnectivityInspector<String,DefaultWeightedEdge> cIGraph = new ConnectivityInspector<>(this.directedWeightedGraph);
         boolean connected = cIGraph.isConnected();
         return connected;
     }
-    public double getMeanDegree(){
+    public void calculMeanDegree(){
         long total = 0;
         //Le nombre moyen d'arêtes qui partent et débutent à partir d'un noeud.
         for(String s : directedWeightedGraph.vertexSet()){
             total += directedWeightedGraph.degreeOf(s);
         }
-        return total / (double)getOrdre();
+        degreMoyen = total / (float)this.ordre;
     }
-    public double getMeanDegreeIn(){
+    public void calculMeanDegreeIn(){
         long total = 0;
         //Le nombre moyen d'arêtes qui partent et débutent à partir d'un noeud.
         for(String s : directedWeightedGraph.vertexSet()){
             total += directedWeightedGraph.inDegreeOf(s);
         }
-        return total / (double)getOrdre();
+        this.degreEntrantMoyen = total / (float)this.ordre;
     }
-    public double getMeanDegreeOut(){
+    public void calculMeanDegreeOut(){
         long total = 0;
         //Le nombre moyen d'arêtes qui partent et débutent à partir d'un noeud.
         for(String s : directedWeightedGraph.vertexSet()){
             total += directedWeightedGraph.outDegreeOf(s);
         }
-        return total / (double)getOrdre();
+        this.degreSortantMoyen = total / (float)this.ordre;
     }
-    public int getOrdre(){
-        return directedWeightedGraph.vertexSet().size();
+    public void calculOrdre(){
+        this.ordre = directedWeightedGraph.vertexSet().size();
     }
-    public int getTaille(){
-        return directedWeightedGraph.edgeSet().size();
+    public void calculTaille(){
+        this.volume = directedWeightedGraph.edgeSet().size();
     }
-    public double getDensite(){
-        float n = this.getOrdre();
-        float t = this.getTaille();
-        return t / (n * (n - 1));
+    public void calculDensite(){
+        float n = this.ordre;
+        float t = this.volume;
+        this.densite = t / (n * (n - 1));
     }
 
     public static void reportPerformanceFor(String msg, long refTime) {

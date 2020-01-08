@@ -1,7 +1,10 @@
 package frontEnd;
 
+import backEnd.CentralUser;
 import backEnd.GraphTweet;
-import backEnd.readingTask;
+import backEnd.Importation;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -15,7 +18,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -23,8 +28,15 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.io.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
-public class OuvertureController {
+public class OuvertureController{
+    private static GraphTweet myGraph;
+    private static String folderPath;
+    private static Stage mainStage;
 
     @FXML
     private TextField textName;
@@ -32,22 +44,20 @@ public class OuvertureController {
     private Button buttonOpen;
 
     @FXML
+    private AnchorPane loadingPanel;
+    @FXML
     private ProgressBar progressFileReader;
     @FXML
     private Button cancelButton;
     @FXML
     private Label statusLabel;
 
-    private GraphTweet graph;
-    private String folderPath;
-    private Task<GraphTweet> copyTask;
-
     public GraphTweet getGraph() {
-        return graph;
+        return myGraph;
     }
 
     public void setGraph(GraphTweet graph) {
-        this.graph = graph;
+        this.myGraph = graph;
     }
 
     public String getFolderPath() {
@@ -63,33 +73,34 @@ public class OuvertureController {
      ****************************************************/
     @FXML
     private void ouvrir(MouseEvent e) throws IOException{
-        OuvertureController me = this;
-
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("Loading.fxml"));
-        Parent loading_root = loader.load();
-
-        Stage loading_stage = new Stage();
-        loading_stage.setTitle("Projet Master Informatique");
-
-        Scene loading_scene = new Scene(loading_root);
-        Stage window_parent = (Stage)((Node) e.getSource()).getScene().getWindow();
-
         if(isFolderNameValid()){
+            setFolderPath("resources/"+textName.getText());
+            mainStage = (Stage)((Node) e.getSource()).getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("Loading.fxml"));
+            loader.setController(this);
+            Parent loading_root = loader.load();
+            Stage loading_stage = new Stage();
+            Scene loading_scene = new Scene(loading_root);
+
             loading_stage.setScene(loading_scene);
-            loading_stage.initOwner(window_parent);
+            loading_stage.initOwner(mainStage);
             loading_stage.initModality(Modality.WINDOW_MODAL);
 
             loading_stage.setOnShown(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
-                    OuvertureController ctrler = loader.getController();
-                    ctrler.setFolderPath("resources/" + textName.getText());
-                    ctrler.startLoading();
+                    startLoading(loading_stage);
                 }
             });
             loading_stage.show();
         }
+    }
+
+    @FXML
+    private void initialize(){
+        System.out.println(this.getClass()+ " est initialisé");
     }
 
     private boolean isFolderNameValid(){
@@ -102,6 +113,10 @@ public class OuvertureController {
         }
     }
 
+    /****************************************************
+     *              CHARGEMENT DU FICHIER                *
+     ****************************************************/
+
     private long lengthOfFile(String file){
         System.out.println(file);
         File f = new File(file);
@@ -113,118 +128,129 @@ public class OuvertureController {
         }
     }
 
-    private void startLoading(){
+    private void startLoading(Stage loadingStage){
+
         progressFileReader.setProgress(0);
         cancelButton.setDisable(false);
 
-        // Create a Task.
-        GraphTweet graph = new GraphTweet();
-
-        copyTask = new Task<GraphTweet>(){
-            @Override
-            protected GraphTweet call() throws Exception {
-
-                BufferedReader csv = new BufferedReader(new FileReader(folderPath));
-                String chaine;
-                GraphTweet g = new GraphTweet();
-                Graph<String, DefaultWeightedEdge> directedWeightedGraph = g.getDirectedWeightedGraph();
-
-                //Calcul de l'avancée
-                double maxSize = lengthOfFile(folderPath);
-                double maxsizeO = maxSize * 8;
-                double maxSizeKo = maxSize / 1024;
-                double maxSizeMo = maxSizeKo / 1024;
-                System.out.println("Taille en o du fichier "+maxSizeMo);
-                double currentSize = 0;
-
-                while ((chaine = csv.readLine()) != null) {
-
-                    String[] tabChaine = chaine.split("\t");
-                    //On ne parcourt que les utilisateurs qui ont retweeté
-                    if (tabChaine.length == 5) {
-                        //Récupération de l'id de l'utilisateur (sommet)
-                        String idUser = tabChaine[1];
-
-                        //Récupération de l'id du retweet (sommet)
-                        String idUserRT = tabChaine[4];
-
-                        //Ajout de l'utilisateur dans le graphe, s'il existe déjà le graphe n'est pas modifié
-                        String source = new String(idUser);
-                        directedWeightedGraph.addVertex(source);
-                        //Ajout de l'utilisateur retweeté dans le graphe, s'il existe déjà le graphe n'est pas modifié
-                        String target = new String(idUserRT);
-                        directedWeightedGraph.addVertex(target);
-
-                        //Ajout d'une arête entre les deux sommets
-                        DefaultWeightedEdge dwe = directedWeightedGraph.getEdge(source,target);
-                        if(dwe == null){
-                            if(!idUser.equals(idUserRT)){
-                                directedWeightedGraph.addEdge(source,target);
-                                directedWeightedGraph.setEdgeWeight(source,target,1);
-                            }
-                        }
-                        else{
-                            directedWeightedGraph.setEdgeWeight(dwe,directedWeightedGraph.getEdgeWeight(dwe) + 1);
-                        }
-                    }
-
-                    currentSize += chaine.length();
-                    double currentSizeKo = currentSize / 1024;
-                    double currentSizeMo = currentSizeKo / 1024;
-
-                    updateMessage(Math.round((currentSizeMo*100)/maxSizeMo)+"%");
-                    updateProgress(currentSize , maxSize);
-                }
-                csv.close();
-
-                updateMessage("100%");
-                updateProgress(maxSize , maxSize);
-                // Return null at the end of a Task of type Void
-                return g;
-            }
-
-        };
+        Importation importData = new Importation(folderPath,lengthOfFile(folderPath));
         // Unbind progress property
         progressFileReader.progressProperty().unbind();
 
         // Bind progress property
-        progressFileReader.progressProperty().bind(copyTask.progressProperty());
+        progressFileReader.progressProperty().bind(importData.progressProperty());
 
         // Unbind text property for Label.
         statusLabel.textProperty().unbind();
 
         // Bind the text property of Label
         // with message property of Task
-        statusLabel.textProperty().bind(copyTask.messageProperty());
+        statusLabel.textProperty().bind(importData.messageProperty());
 
         // When completed tasks
-        copyTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, //
+        importData.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, //
                 new EventHandler<WorkerStateEvent>() {
                     @Override
                     public void handle(WorkerStateEvent t) {
-                        GraphTweet graph = copyTask.getValue();
+                        myGraph = new GraphTweet();
+                        myGraph.setDirectedWeightedGraph(importData.getValue());
                         statusLabel.textProperty().unbind();
-                        System.out.println("Données chargées");
-                        System.out.println("Nombre de sommets : "+graph.getOrdre());
-                        System.out.println("Nombre d'arc : "+graph.getTaille());
+                        loadingStage.close();
+                        afficheInterface();
                     }
                 });
 
-        copyTask.addEventHandler(WorkerStateEvent.WORKER_STATE_CANCELLED, //
+        importData.addEventHandler(WorkerStateEvent.WORKER_STATE_CANCELLED, //
                 new EventHandler<WorkerStateEvent>() {
                     @Override
                     public void handle(WorkerStateEvent t) {
+                        myGraph = null;
                         statusLabel.textProperty().unbind();
-                        System.out.println("Abandon de la procédure");
+                        progressFileReader.progressProperty().unbind();
+                        progressFileReader.setProgress(0);
+                        loadingStage.close();
                     }
                 });
 
         // Start the Task.
-        new Thread(copyTask).start();
+        new Thread(importData).start();
+
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                importData.cancel();
+            }
+        });
     }
 
-    @FXML
-    private void onCancelButton(ActionEvent e){
-        copyTask.cancel();
+    private void afficheInterface(){
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("interface.fxml"));
+            Parent interface_root;
+            try {
+                interface_root = loader.load();
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            Scene interface_scene = new Scene(interface_root);
+
+            mainStage.setScene(interface_scene);
+            mainStage.show();
     }
+
+    /*private void execution() {
+        DecimalFormat df = new DecimalFormat("0.00000000");
+        double dens = bd.getDensite();
+        densite.setText(String.valueOf(dens));
+
+        int taille_var = bd.getVolume();
+        taille.setText(String.valueOf(taille_var));
+        int ordre_var = bd.getOrdre();
+        ordre.setText(String.valueOf(ordre_var));
+        double diametre_var = bd.getDiametre();
+        diametre.setText(String.valueOf(diametre_var));
+
+        double meandegree = bd.getDegreMoyen();
+        degre_moy.setText(String.valueOf(meandegree));
+        double meandegreein = bd.getDegreEntrantMoyen();
+        degre_moy_in.setText(String.valueOf(meandegreein));
+        double meandegreeout = bd.getDegreSortantMoyen();
+        degre_moy_out.setText(String.valueOf(meandegreeout));
+
+        TreeSet<CentralUser> pageR = bd.getPageRank(5);
+
+        page_rk_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
+
+        // Create column Email (Data type of String).
+        //  TableColumn<backEnd.CentralUser, Double> score = new TableColumn<backEnd.CentralUser, Double>("score");
+        page_rk_score.setCellValueFactory(new PropertyValueFactory<>("score"));
+        //page_rk_tab.getColumns().addAll(userName, score);
+
+        ObservableList<CentralUser> list = getNewsListPR();
+        page_rk_tab.setItems(list);
+
+
+        centr_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
+
+        // Create column Email (Data type of String).
+        //  TableColumn<backEnd.CentralUser, Double> score = new TableColumn<backEnd.CentralUser, Double>("score");
+        centr_score.setCellValueFactory(new PropertyValueFactory<>("score"));
+        //page_rk_tab.getColumns().addAll(userName, score);
+
+        ObservableList<CentralUser> listCentr = getNewsListCentr();
+        centr.setItems(listCentr);
+
+    }
+    private ObservableList<CentralUser> getNewsListPR(){
+        List<CentralUser> list = new ArrayList<CentralUser>(bd.getPageRank(5));
+        ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
+        return obs_list;
+    }
+    private ObservableList<CentralUser> getNewsListCentr(){
+        List<CentralUser> list = new ArrayList<CentralUser> (bd.getDegreeCentrality(5));
+        ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
+        return obs_list;
+    }*/
+
 }
