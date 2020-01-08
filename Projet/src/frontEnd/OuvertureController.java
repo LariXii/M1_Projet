@@ -80,6 +80,8 @@ public class OuvertureController{
     private TableColumn<CentralUser, String> centr_user;
     @FXML
     private TableColumn<CentralUser, Double> centr_score;
+    @FXML
+    private TextField nbr_central_user;
 
     public GraphTweet getGraph() {
         return myGraph;
@@ -272,7 +274,6 @@ public class OuvertureController{
                             ie.printStackTrace();
                         }
                         indicatorStatistique.setVisible(false);
-
                         interfacePane.setDisable(false);
                         afficheStatistique();
                     }
@@ -311,37 +312,28 @@ public class OuvertureController{
         double meandegreeout = myGraph.getDegreSortantMoyen();
         degre_moy_out.setText(String.valueOf(meandegreeout));
 
-        TreeSet<CentralUser> pageR = myGraph.getPageRank(5);
-
         page_rk_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
-
-        // Create column Email (Data type of String).
-        //  TableColumn<backEnd.CentralUser, Double> score = new TableColumn<backEnd.CentralUser, Double>("score");
         page_rk_score.setCellValueFactory(new PropertyValueFactory<>("score"));
-        //page_rk_tab.getColumns().addAll(userName, score);
 
-        ObservableList<CentralUser> list = getNewsListPR();
+
+        ObservableList<CentralUser> list = getNewsListPR(5);
         page_rk_tab.setItems(list);
 
 
         centr_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
-
-        // Create column Email (Data type of String).
-        //  TableColumn<backEnd.CentralUser, Double> score = new TableColumn<backEnd.CentralUser, Double>("score");
         centr_score.setCellValueFactory(new PropertyValueFactory<>("score"));
-        //page_rk_tab.getColumns().addAll(userName, score);
 
-        ObservableList<CentralUser> listCentr = getNewsListCentr();
+        ObservableList<CentralUser> listCentr = getNewsListCentr(5);
         centr.setItems(listCentr);
     }
 
-    private ObservableList<CentralUser> getNewsListPR(){
-        List<CentralUser> list = new ArrayList<CentralUser>(myGraph.getPageRank(5));
+    private ObservableList<CentralUser> getNewsListPR(int n){
+        List<CentralUser> list = new ArrayList<CentralUser>(myGraph.getPageRank(n));
         ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
         return obs_list;
     }
-    private ObservableList<CentralUser> getNewsListCentr(){
-        List<CentralUser> list = new ArrayList<CentralUser> (myGraph.getDegreeCentrality(5));
+    private ObservableList<CentralUser> getNewsListCentr(int n){
+        List<CentralUser> list = new ArrayList<CentralUser> (myGraph.getDegreeCentrality(n));
         ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
         return obs_list;
     }

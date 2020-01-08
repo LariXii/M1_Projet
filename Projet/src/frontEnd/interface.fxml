@@ -105,16 +105,17 @@
              <Button fx:id="btnDisplayCluster" mnemonicParsing="false" text="Clustering" />
            </buttons>
          </ButtonBar>
-         <Spinner fx:id="nbr_central_user" editable="true" layoutX="163.0" layoutY="73.0" prefHeight="25.0" prefWidth="58.0" />
-         <Label layoutX="82.0" layoutY="77.0" prefHeight="17.0" prefWidth="81.0" text="Afficher les " />
+         <Label layoutX="22.0" layoutY="77.0" prefHeight="17.0" prefWidth="70.0" text="Afficher les " />
          <Label layoutX="163.0" layoutY="14.0" text="Centralité" textFill="#401e1e">
             <font>
                <Font size="22.0" />
             </font>
          </Label>
-         <Label layoutX="242.0" layoutY="77.0" prefHeight="17.0" prefWidth="164.0" text="premiers utilisateurs centraux" />
+         <Label layoutX="151.0" layoutY="77.0" prefHeight="17.0" prefWidth="164.0" text="premiers utilisateurs centraux" />
          <Separator layoutY="55.0" prefHeight="3.0" prefWidth="848.0" />
          <ProgressIndicator fx:id="indicatorStatistique" layoutX="-18.0" layoutY="196.0" prefHeight="47.0" prefWidth="49.0" progress="0.0" visible="false" />
+         <TextField fx:id="nbr_central_user" editable="false" layoutX="98.0" layoutY="73.0" prefHeight="25.0" prefWidth="37.0" text="5" />
+         <Button layoutX="341.0" layoutY="73.0" mnemonicParsing="false" text="Ok" />
       </children>
         </AnchorPane>
 </AnchorPane>
