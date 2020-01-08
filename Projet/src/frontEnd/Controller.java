@@ -69,8 +69,7 @@ public class Controller  {
 
     @FXML
     private void ouvrir() {
-        //execution();
-        pane_graph.setVisible(!pane_graph.isVisible());
+        execution();
     }
     private ObservableList<CentralUser> userData = FXCollections.observableArrayList();
 
@@ -81,11 +80,6 @@ public class Controller  {
     public void afficher(){
         System.out.println("Test");
     }
-
-    //objets graphiques représentant un cercle
-
-    public  Rectangle rectangle;
-    private BooleanProperty isNotCreate = new SimpleBooleanProperty(true);
     private static GraphTweet bd;
 
 
@@ -94,49 +88,6 @@ public class Controller  {
 
 
     private void execution() {
-/*
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
-
-        Label label_fichier = new Label("Nom du fichier : ");
-        grid.add(label_fichier, 0, 1);
-
-        TextField field_fichier = new TextField();
-        grid.add(field_fichier, 1, 1);
-
-        ButtonBar buttonBar = new ButtonBar();
-        Button addBut = new Button("Confirmer");
-
-        ButtonBar.setButtonData(addBut, ButtonBar.ButtonData.OK_DONE);
-
-        Button cancelBut = new Button("Annuler");
-        ButtonBar.setButtonData(cancelBut, ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        // Add buttons to the ButtonBar
-        buttonBar.getButtons().addAll(addBut, cancelBut);
-
-        grid.add(buttonBar,1,2);
-
-        Scene sceneForm = new Scene(grid, 350, 100);
-
-        // New window (Stage)
-        Stage windowForm = new Stage();
-        if(open) {
-            windowForm.setTitle("Ouvrir un fichier");
-        }else {
-            windowForm.setTitle("Enregistrer sous...");
-        }
-        windowForm.setScene(sceneForm);
-*/
-        // Set position of second window, related to primary window.
-        //windowForm.setX(primaryStage.getX() + (primaryStage.getWidth()/2 - sceneForm.getWidth()/2));
-        //windowForm.setY(primaryStage.getY() + (primaryStage.getHeight()/2 - sceneForm.getHeight()/2));
-    //    windowForm.show();
-
-                //try{
                     bd = new GraphTweet();
                     long startTime = System.currentTimeMillis();
                     //bd.ouvrir(fichier.getText());
@@ -150,7 +101,7 @@ public class Controller  {
                     double dens = bd.getDensite();
                     densite.setText(String.valueOf(dens));
 
-                    int taille_var = bd.getTaille();
+                    int taille_var = bd.getVolume();
                     taille.setText(String.valueOf(taille_var));
                     int ordre_var = bd.getOrdre();
                     ordre.setText(String.valueOf(ordre_var));
@@ -165,11 +116,11 @@ public class Controller  {
                     //page_rk.setText(String.valueOf(page_r));
 
 
-                    double meandegree = bd.getMeanDegree();
+                    double meandegree = bd.getDegreMoyen();
                     degre_moy.setText(String.valueOf(meandegree));
-                    double meandegreein = bd.getMeanDegreeIn();
+                    double meandegreein = bd.getDegreEntrantMoyen();
                     degre_moy_in.setText(String.valueOf(meandegreein));
-                    double meandegreeout = bd.getMeanDegreeOut();
+                    double meandegreeout = bd.getDegreSortantMoyen();
                     degre_moy_out.setText(String.valueOf(meandegreeout));
 
 
