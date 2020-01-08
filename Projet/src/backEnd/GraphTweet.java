@@ -1,4 +1,4 @@
-package backEnd;//import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
+package backEnd;
 import javafx.concurrent.Task;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
@@ -15,6 +15,10 @@ import java.util.stream.Collectors;
 
 public class GraphTweet{
     private Graph<String,DefaultWeightedEdge> directedWeightedGraph;
+
+    public GraphTweet(){
+        directedWeightedGraph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    }
 
     public Graph<String,DefaultWeightedEdge> getDirectedWeightedGraph(){
         return directedWeightedGraph;
@@ -139,54 +143,10 @@ public class GraphTweet{
         return t / (n * (n - 1));
     }
 
-    public Task<Void> ouvrir(String file){
-        /**
-         * Initialisation du buffer
-         * */
-        Task<Void> task = new Task<Void>() {
-            @Override protected Void call() throws Exception {
-                BufferedReader csv = new BufferedReader(new FileReader("resources/" + file));
-                String chaine;
-                new GraphTweet();
-                long time = System.currentTimeMillis();
-                directedWeightedGraph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-                while ((chaine = csv.readLine()) != null) {
-                    String[] tabChaine = chaine.split("\t");
-                    //On ne parcourt que les utilisateurs qui ont retweeté
-                    if (tabChaine.length == 5) {
-                        //Récupération de l'id de l'utilisateur (sommet)
-                        String idUser = tabChaine[1];
+    /*public Task<Void> ouvrir(String file,long size){
 
-                        //Récupération de l'id du retweet (sommet)
-                        String idUserRT = tabChaine[4];
-
-                        //Ajout de l'utilisateur dans le graphe, s'il existe déjà le graphe n'est pas modifié
-                        String source = new String(idUser);
-                        directedWeightedGraph.addVertex(source);
-                        //Ajout de l'utilisateur retweeté dans le graphe, s'il existe déjà le graphe n'est pas modifié
-                        String target = new String(idUserRT);
-                        directedWeightedGraph.addVertex(target);
-
-                        //Ajout d'une arête entre les deux sommets
-                        DefaultWeightedEdge dwe = directedWeightedGraph.getEdge(source,target);
-                        if(dwe == null){
-                            if(!idUser.equals(idUserRT)){
-                                directedWeightedGraph.addEdge(source,target);
-                                directedWeightedGraph.setEdgeWeight(source,target,1);
-                            }
-                        }
-                        else{
-                            directedWeightedGraph.setEdgeWeight(dwe,directedWeightedGraph.getEdgeWeight(dwe) + 1);
-                        }
-                    }
-                }
-                csv.close();
-                // Return null at the end of a Task of type Void
-                return null;
-            }
-        };
-        return task;
-    }
+        //return new readingTask(file,size);
+    }*/
 
     public static void reportPerformanceFor(String msg, long refTime) {
         double time = (System.currentTimeMillis() - refTime) / 1000.0;

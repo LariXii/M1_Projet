@@ -139,7 +139,7 @@ public class Controller  {
                 //try{
                     bd = new GraphTweet();
                     long startTime = System.currentTimeMillis();
-                    bd.ouvrir(fichier.getText());
+                    //bd.ouvrir(fichier.getText());
                     long endTime = System.currentTimeMillis();
                     Graph<String, DefaultWeightedEdge> g = bd.getDirectedWeightedGraph();
 
