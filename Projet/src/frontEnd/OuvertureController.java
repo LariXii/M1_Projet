@@ -14,18 +14,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -38,11 +33,13 @@ public class OuvertureController{
     private static String folderPath;
     private static Stage mainStage;
 
+    //FENETRE DE SAISIE
     @FXML
     private TextField textName;
     @FXML
     private Button buttonOpen;
 
+    //FENETRE DE CHARGEMENT
     @FXML
     private AnchorPane loadingPanel;
     @FXML
@@ -51,6 +48,38 @@ public class OuvertureController{
     private Button cancelButton;
     @FXML
     private Label statusLabel;
+
+    //FENETRE D'INTERFACE
+    @FXML
+    private ProgressIndicator indicatorStatistique;
+    @FXML
+    private AnchorPane interfacePane;
+    @FXML
+    private Label densite;
+    @FXML
+    private Label taille;
+    @FXML
+    private Label ordre;
+    @FXML
+    private Label diametre;
+    @FXML
+    private Label degre_moy;
+    @FXML
+    private Label degre_moy_in;
+    @FXML
+    private Label degre_moy_out;
+    @FXML
+    private TableView<CentralUser> page_rk_tab;
+    @FXML
+    private TableColumn<CentralUser, String> page_rk_user;
+    @FXML
+    private TableColumn<CentralUser, Double> page_rk_score;
+    @FXML
+    private TableView<CentralUser> centr;
+    @FXML
+    private TableColumn<CentralUser, String> centr_user;
+    @FXML
+    private TableColumn<CentralUser, Double> centr_score;
 
     public GraphTweet getGraph() {
         return myGraph;
@@ -188,6 +217,7 @@ public class OuvertureController{
             loader.setLocation(getClass().getResource("interface.fxml"));
             Parent interface_root;
             try {
+                loader.setController(this);
                 interface_root = loader.load();
             } catch (IOException exception) {
                 throw new RuntimeException(exception);
@@ -195,30 +225,93 @@ public class OuvertureController{
 
             Scene interface_scene = new Scene(interface_root);
 
+            mainStage.hide();
             mainStage.setScene(interface_scene);
+            mainStage.setOnShown(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    execution();
+                }
+            });
             mainStage.show();
     }
 
-    /*private void execution() {
-        DecimalFormat df = new DecimalFormat("0.00000000");
-        double dens = bd.getDensite();
+    private void execution() {
+        interfacePane.setDisable(true);
+
+        indicatorStatistique.setProgress(0);
+        indicatorStatistique.setVisible(true);
+
+        Task<Void> calculsStats = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                myGraph.calculOrdre();
+                myGraph.calculVolume();
+                myGraph.calculDensite();
+                myGraph.calculDiametre();
+                myGraph.calculMeanDegree();
+                myGraph.calculMeanDegreeIn();
+                myGraph.calculMeanDegreeOut();
+                return null;
+            }
+        };
+
+        indicatorStatistique.progressProperty().unbind();
+
+        // Bind progress property
+        indicatorStatistique.progressProperty().bind(calculsStats.progressProperty());
+
+        calculsStats.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, //
+                new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent t) {
+                        try{
+                            Thread.sleep(500);
+                        }
+                        catch(InterruptedException ie){
+                            ie.printStackTrace();
+                        }
+                        indicatorStatistique.setVisible(false);
+
+                        interfacePane.setDisable(false);
+                        afficheStatistique();
+                    }
+                });
+
+        calculsStats.addEventHandler(WorkerStateEvent.WORKER_STATE_CANCELLED, //
+                new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent t) {
+
+                    }
+                });
+
+        new Thread(calculsStats).start();
+    }
+
+    private void afficheStatistique(){
+        double dens = myGraph.getDensite();
         densite.setText(String.valueOf(dens));
 
-        int taille_var = bd.getVolume();
+        int taille_var = myGraph.getVolume();
         taille.setText(String.valueOf(taille_var));
-        int ordre_var = bd.getOrdre();
+
+        int ordre_var = myGraph.getOrdre();
         ordre.setText(String.valueOf(ordre_var));
-        double diametre_var = bd.getDiametre();
+
+        double diametre_var = myGraph.getDiametre();
         diametre.setText(String.valueOf(diametre_var));
 
-        double meandegree = bd.getDegreMoyen();
+        double meandegree = myGraph.getDegreMoyen();
         degre_moy.setText(String.valueOf(meandegree));
-        double meandegreein = bd.getDegreEntrantMoyen();
+
+        double meandegreein = myGraph.getDegreEntrantMoyen();
         degre_moy_in.setText(String.valueOf(meandegreein));
-        double meandegreeout = bd.getDegreSortantMoyen();
+
+        double meandegreeout = myGraph.getDegreSortantMoyen();
         degre_moy_out.setText(String.valueOf(meandegreeout));
 
-        TreeSet<CentralUser> pageR = bd.getPageRank(5);
+        TreeSet<CentralUser> pageR = myGraph.getPageRank(5);
 
         page_rk_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
 
@@ -240,17 +333,17 @@ public class OuvertureController{
 
         ObservableList<CentralUser> listCentr = getNewsListCentr();
         centr.setItems(listCentr);
-
     }
+
     private ObservableList<CentralUser> getNewsListPR(){
-        List<CentralUser> list = new ArrayList<CentralUser>(bd.getPageRank(5));
+        List<CentralUser> list = new ArrayList<CentralUser>(myGraph.getPageRank(5));
         ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
         return obs_list;
     }
     private ObservableList<CentralUser> getNewsListCentr(){
-        List<CentralUser> list = new ArrayList<CentralUser> (bd.getDegreeCentrality(5));
+        List<CentralUser> list = new ArrayList<CentralUser> (myGraph.getDegreeCentrality(5));
         ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
         return obs_list;
-    }*/
+    }
 
 }

@@ -183,7 +183,7 @@ public class GraphTweet{
     public void calculOrdre(){
         this.ordre = directedWeightedGraph.vertexSet().size();
     }
-    public void calculTaille(){
+    public void calculVolume(){
         this.volume = directedWeightedGraph.edgeSet().size();
     }
     public void calculDensite(){
