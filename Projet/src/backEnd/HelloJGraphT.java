@@ -18,7 +18,7 @@ public class HelloJGraphT {
         catch(IOException ioe){
             System.out.println("Erreur : Open file");
         }*/
-        org.graphstream.graph.Graph graph = Tutorial1.JGraphTTOGraphStream(bd.getDirectedWeightedGraph());
+        org.graphstream.graph.Graph graph = AfficheGraph.JGraphTTOGraphStream(bd.getDirectedWeightedGraph());
 
         System.out.println(Toolkit.averageDegree(graph));
         System.out.println(graph.getEdgeCount());

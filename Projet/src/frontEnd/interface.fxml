@@ -101,7 +101,7 @@
          </AnchorPane>
          <ButtonBar layoutY="385.0" prefHeight="40.0" prefWidth="412.0">
            <buttons>
-               <Button fx:id="btnDisplayGraph" mnemonicParsing="false" text="Voir le graphe" />
+               <Button fx:id="btnDisplayGraph" mnemonicParsing="false" onAction="#afficheGraphe" text="Voir le graphe" />
              <Button fx:id="btnDisplayCluster" mnemonicParsing="false" text="Clustering" />
            </buttons>
          </ButtonBar>

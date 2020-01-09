@@ -1,5 +1,6 @@
 package frontEnd;
 
+import backEnd.AfficheGraph;
 import backEnd.CentralUser;
 import backEnd.GraphTweet;
 import backEnd.Importation;
@@ -21,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.jgrapht.Graph;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -82,6 +84,8 @@ public class OuvertureController{
     private TableColumn<CentralUser, Double> centr_score;
     @FXML
     private TextField nbr_central_user;
+    @FXML
+    private Button btnDisplayGraph;
 
     public GraphTweet getGraph() {
         return myGraph;
@@ -332,10 +336,18 @@ public class OuvertureController{
         ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
         return obs_list;
     }
+
     private ObservableList<CentralUser> getNewsListCentr(int n){
         List<CentralUser> list = new ArrayList<CentralUser> (myGraph.getDegreeCentrality(n));
         ObservableList<CentralUser> obs_list = FXCollections.observableList(list);
         return obs_list;
+    }
+
+    @FXML
+    private void afficheGraphe(){
+        Graph g = myGraph.getSubGraph(50);
+        AfficheGraph affichage = new AfficheGraph(g);
+        affichage.afficheGraphe();
     }
 
 }

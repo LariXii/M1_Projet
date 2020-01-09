@@ -5,13 +5,16 @@ import org.graphstream.ui.layout.springbox.implementations.LinLog;
 import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 import org.graphstream.ui.view.Viewer;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
 
 
-public class Tutorial1 {
+public class AfficheGraph {
+    private org.jgrapht.Graph<String, org.jgrapht.graph.DefaultWeightedEdge> graphe;
+
     public static void main(String args[]) {
         /*Graph graph = new SingleGraph("Tutorial 1");
 
@@ -55,6 +58,20 @@ public class Tutorial1 {
         LinLog layout = new LinLog(false,new Random(0));
         v.enableAutoLayout(layout);
 
+    }
+
+    public AfficheGraph(org.jgrapht.Graph g){
+        this.graphe = g;
+    }
+
+    public void afficheGraphe(){
+        org.graphstream.graph.Graph g = JGraphTTOGraphStream(graphe);
+        g.addAttribute("ui.stylesheet", "node {size: 4px;size-mode: dyn-size;fill-color: BLUE;text-mode: normal;z-index: 3;}edge {shape: line;fill-color: rgba(39,106,113,50);arrow-size: 1px, 0px; size: 0px;}");
+
+        Viewer v = g.display(false);
+
+        LinLog layout = new LinLog(false,new Random(0));
+        v.enableAutoLayout(layout);
     }
 
     private static void JGraphTTOGraphStream(org.jgrapht.Graph<String, org.jgrapht.graph.DefaultWeightedEdge> dwGraph, double maxWeight){
