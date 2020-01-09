@@ -102,7 +102,7 @@
          <ButtonBar layoutY="385.0" prefHeight="40.0" prefWidth="412.0">
            <buttons>
                <Button fx:id="btnDisplayGraph" mnemonicParsing="false" onAction="#afficheGraphe" text="Voir le graphe" />
-             <Button fx:id="btnDisplayCluster" mnemonicParsing="false" text="Clustering" />
+             <Button fx:id="btnDisplayCluster" disable="true" mnemonicParsing="false" text="Clustering" />
            </buttons>
          </ButtonBar>
          <Label layoutX="22.0" layoutY="77.0" prefHeight="17.0" prefWidth="70.0" text="Afficher les " />
@@ -115,7 +115,7 @@
          <Separator layoutY="55.0" prefHeight="3.0" prefWidth="848.0" />
          <ProgressIndicator fx:id="indicatorStatistique" layoutX="-18.0" layoutY="196.0" prefHeight="47.0" prefWidth="49.0" progress="0.0" visible="false" />
          <TextField fx:id="nbr_central_user" editable="false" layoutX="98.0" layoutY="73.0" prefHeight="25.0" prefWidth="37.0" text="5" />
-         <Button layoutX="341.0" layoutY="73.0" mnemonicParsing="false" text="Ok" />
+         <Button disable="true" layoutX="341.0" layoutY="73.0" mnemonicParsing="false" text="Ok" />
       </children>
         </AnchorPane>
 </AnchorPane>

@@ -28,7 +28,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OuvertureController{
+public class Controller {
     private static GraphTweet myGraph;
     private static String folderPath;
     private static String folderName;
@@ -293,15 +293,11 @@ public class OuvertureController{
 
         page_rk_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
         page_rk_score.setCellValueFactory(new PropertyValueFactory<>("score"));
-
-
         ObservableList<CentralUser> list = getNewsListPR(5);
         page_rk_tab.setItems(list);
 
-
         centr_user.setCellValueFactory(new PropertyValueFactory<>("UserName"));
         centr_score.setCellValueFactory(new PropertyValueFactory<>("score"));
-
         ObservableList<CentralUser> listCentr = getNewsListCentr(5);
         centr.setItems(listCentr);
     }
