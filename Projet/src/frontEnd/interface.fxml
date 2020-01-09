@@ -52,7 +52,7 @@
                <Font size="25.0" />
             </font>
          </Label>
-         <Label fx:id="folderName" alignment="CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="4.0" prefHeight="40.0" prefWidth="164.0" text="Foot" textAlignment="CENTER" textFill="#401e1e">
+         <Label fx:id="labelFolderName" alignment="CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="4.0" prefHeight="40.0" prefWidth="164.0" text="Foot" textAlignment="CENTER" textFill="#401e1e">
             <font>
                <Font size="25.0" />
             </font>

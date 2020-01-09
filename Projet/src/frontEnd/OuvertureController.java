@@ -31,6 +31,7 @@ import java.util.List;
 public class OuvertureController{
     private static GraphTweet myGraph;
     private static String folderPath;
+    private static String folderName;
     private static Stage mainStage;
 
     //FENETRE DE SAISIE
@@ -84,6 +85,8 @@ public class OuvertureController{
     private TextField nbr_central_user;
     @FXML
     private Button btnDisplayGraph;
+    @FXML
+    private Label labelFolderName;
 
     /****************************************************
      *              OUVERTURE DU FICHIER                *
@@ -92,6 +95,7 @@ public class OuvertureController{
     private void ouvrir(MouseEvent e) throws IOException{
         if(isFolderNameValid()){
             folderPath = "resources/"+textName.getText();
+            folderName = textName.getText();
             mainStage = (Stage)((Node) e.getSource()).getScene().getWindow();
 
             FXMLLoader loader = new FXMLLoader();
@@ -207,6 +211,8 @@ public class OuvertureController{
             mainStage.setOnShown(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
+                    String[] nameData = folderName.split("\\.");
+                    labelFolderName.setText(nameData[0].toUpperCase());
                     execution();
                 }
             });
