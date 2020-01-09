@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="interfacePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="420.0">
+            <children>
+                  <AnchorPane layoutY="91.0" minHeight="0.0" minWidth="0.0" prefHeight="299.0" prefWidth="420.0">
+                      <children>
+                          <GridPane layoutY="42.0" prefHeight="257.0" prefWidth="398.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0">
+                              <columnConstraints>
+                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="213.0" minWidth="10.0" prefWidth="130.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.0" minWidth="10.0" prefWidth="272.0" />
+                              </columnConstraints>
+                              <rowConstraints>
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              </rowConstraints>
+                  <children>
+                     <Label text="Densité : " />
+                     <Label text="Taille : " GridPane.rowIndex="1" />
+                     <Label text="Ordre : " GridPane.rowIndex="2" />
+                     <Label text="Diametre : " GridPane.rowIndex="3" />
+                     <Label text="Degré moyen : " GridPane.rowIndex="4" />
+                     <Label lineSpacing="2.0" text="Degré moyen entrant : " GridPane.rowIndex="5" />
+                     <Label text="Degré moyen sortant : " GridPane.rowIndex="6" />
+                     <Label fx:id="densite" GridPane.columnIndex="1" />
+                     <Label fx:id="taille" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     <Label fx:id="ordre" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     <Label fx:id="diametre" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     <Label fx:id="degre_moy" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     <Label fx:id="degre_moy_in" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                     <Label fx:id="degre_moy_out" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  </children>
+                          </GridPane>
+               <Label layoutX="156.0" layoutY="-2.0" prefHeight="32.0" prefWidth="109.0" text="Statistique" textFill="#401e1e">
+                  <font>
+                     <Font size="22.0" />
+                  </font>
+               </Label>
+                      </children>
+                  </AnchorPane>
+         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="4.0" prefHeight="40.0" prefWidth="123.0" text="Données : " textAlignment="CENTER" textFill="#401e1e">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Label>
+         <Label fx:id="labelFolderName" alignment="CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="4.0" prefHeight="40.0" prefWidth="164.0" text="Foot" textAlignment="CENTER" textFill="#401e1e">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Label>
+         <Separator layoutX="-45.0" layoutY="55.0" prefHeight="3.0" prefWidth="915.0" />
+         <Separator layoutX="408.0" layoutY="1.0" orientation="VERTICAL" prefHeight="430.0" prefWidth="0.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="jgraph" layoutX="420.0" minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="420.0">
+      <children>
+       <AnchorPane layoutX="14.0" layoutY="109.0" minHeight="0.0" minWidth="0.0" prefHeight="235.0" prefWidth="188.0">
+            <children>
+               <Label layoutX="54.0" layoutY="6.0" prefHeight="27.0" prefWidth="188.0" text="Centralité par degré" textFill="#401e1e" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <font>
+                     <Font size="18.0" />
+                  </font>
+               </Label>
+                          <TableView fx:id="page_rk_tab" layoutY="27.0" prefHeight="209.0" prefWidth="188.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
+                              <columns>
+                                  <TableColumn fx:id="page_rk_user" prefWidth="79.0" text="Nom" />
+                                  <TableColumn fx:id="page_rk_score" prefWidth="79.0" text="Score" />
+                              </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+                          </TableView>
+            </children>
+         </AnchorPane>
+         <AnchorPane layoutX="221.0" layoutY="109.0" minHeight="0.0" minWidth="0.0" prefHeight="235.0" prefWidth="188.0">
+            <children>
+               <Label layoutX="54.0" layoutY="6.0" prefHeight="27.0" prefWidth="188.0" text="PageRank" textFill="#401e1e" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <font>
+                     <Font size="18.0" />
+                  </font>
+               </Label>
+               <TableView fx:id="centr" layoutY="27.0" prefHeight="209.0" prefWidth="188.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
+                  <columns>
+                     <TableColumn fx:id="centr_user" prefWidth="79.0" text="Nom" />
+                     <TableColumn fx:id="centr_score" prefWidth="79.0" text="Score" />
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+            </children>
+         </AnchorPane>
+         <ButtonBar layoutY="385.0" prefHeight="40.0" prefWidth="412.0">
+           <buttons>
+               <Button fx:id="btnDisplayGraph" mnemonicParsing="false" onAction="#afficheGraphe" text="Voir le graphe" />
+             <Button fx:id="btnDisplayCluster" disable="true" mnemonicParsing="false" text="Clustering" />
+           </buttons>
+         </ButtonBar>
+         <Label layoutX="22.0" layoutY="77.0" prefHeight="17.0" prefWidth="70.0" text="Afficher les " />
+         <Label layoutX="163.0" layoutY="14.0" text="Centralité" textFill="#401e1e">
+            <font>
+               <Font size="22.0" />
+            </font>
+         </Label>
+         <Label layoutX="151.0" layoutY="77.0" prefHeight="17.0" prefWidth="164.0" text="premiers utilisateurs centraux" />
+         <Separator layoutY="55.0" prefHeight="3.0" prefWidth="848.0" />
+         <ProgressIndicator fx:id="indicatorStatistique" layoutX="-18.0" layoutY="196.0" prefHeight="47.0" prefWidth="49.0" progress="0.0" visible="false" />
+         <TextField fx:id="nbr_central_user" editable="false" layoutX="98.0" layoutY="73.0" prefHeight="25.0" prefWidth="37.0" text="5" />
+         <Button disable="true" layoutX="341.0" layoutY="73.0" mnemonicParsing="false" text="Ok" />
+      </children>
+        </AnchorPane>
+</AnchorPane>
