@@ -74,7 +74,6 @@ public class Importation extends Task<Graph> {
         csv.close();
         updateMessage("100%");
         updateProgress(maxSize , maxSize);
-        // Return null at the end of a Task of type Void
         return directedWeightedGraph;
     }
 

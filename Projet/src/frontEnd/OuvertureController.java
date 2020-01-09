@@ -25,10 +25,8 @@ import javafx.stage.WindowEvent;
 import org.jgrapht.Graph;
 
 import java.io.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 public class OuvertureController{
     private static GraphTweet myGraph;
@@ -87,29 +85,13 @@ public class OuvertureController{
     @FXML
     private Button btnDisplayGraph;
 
-    public GraphTweet getGraph() {
-        return myGraph;
-    }
-
-    public void setGraph(GraphTweet graph) {
-        this.myGraph = graph;
-    }
-
-    public String getFolderPath() {
-        return folderPath;
-    }
-
-    public void setFolderPath(String folderPath) {
-        this.folderPath = folderPath;
-    }
-
     /****************************************************
      *              OUVERTURE DU FICHIER                *
      ****************************************************/
     @FXML
     private void ouvrir(MouseEvent e) throws IOException{
         if(isFolderNameValid()){
-            setFolderPath("resources/"+textName.getText());
+            folderPath = "resources/"+textName.getText();
             mainStage = (Stage)((Node) e.getSource()).getScene().getWindow();
 
             FXMLLoader loader = new FXMLLoader();
@@ -133,11 +115,6 @@ public class OuvertureController{
         }
     }
 
-    @FXML
-    private void initialize(){
-        System.out.println(this.getClass()+ " est initialisé");
-    }
-
     private boolean isFolderNameValid(){
         try{
             new FileReader("resources/" + textName.getText());
@@ -153,7 +130,6 @@ public class OuvertureController{
      ****************************************************/
 
     private long lengthOfFile(String file){
-        System.out.println(file);
         File f = new File(file);
         if(f.exists()){
             return f.length();
@@ -169,20 +145,13 @@ public class OuvertureController{
         cancelButton.setDisable(false);
 
         Importation importData = new Importation(folderPath,lengthOfFile(folderPath));
-        // Unbind progress property
-        progressFileReader.progressProperty().unbind();
 
-        // Bind progress property
+        progressFileReader.progressProperty().unbind();
         progressFileReader.progressProperty().bind(importData.progressProperty());
 
-        // Unbind text property for Label.
         statusLabel.textProperty().unbind();
-
-        // Bind the text property of Label
-        // with message property of Task
         statusLabel.textProperty().bind(importData.messageProperty());
 
-        // When completed tasks
         importData.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, //
                 new EventHandler<WorkerStateEvent>() {
                     @Override
@@ -206,8 +175,6 @@ public class OuvertureController{
                         loadingStage.close();
                     }
                 });
-
-        // Start the Task.
         new Thread(importData).start();
 
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -217,6 +184,10 @@ public class OuvertureController{
             }
         });
     }
+
+    /**********************************************************
+     *              AFFICHAGE DES STATISTIQUES                *
+     **********************************************************/
 
     private void afficheInterface(){
             FXMLLoader loader = new FXMLLoader();
@@ -263,8 +234,6 @@ public class OuvertureController{
         };
 
         indicatorStatistique.progressProperty().unbind();
-
-        // Bind progress property
         indicatorStatistique.progressProperty().bind(calculsStats.progressProperty());
 
         calculsStats.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, //
